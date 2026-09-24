@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>SIM — correct install</title>
+  <script src="https://t.sealmetrics.com/t.js?id=acct_demo" defer></script>
+</head>
+<body>
+  <h1>Camiseta básica</h1>
+  <button id="add" onclick="sealmetrics.micro('add_to_cart', { product_id: 'SKU-123', quantity: 1 })">Añadir al carrito</button>
+  <button id="buy" onclick="sealmetrics.conv('purchase', Number('149.99'), { currency: 'EUR', items: [{ product_id: 'SKU-123', quantity: 1, price: 149.99 }] })">Comprar</button>
+</body>
+</html>

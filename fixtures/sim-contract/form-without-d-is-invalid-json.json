@@ -1,0 +1,13 @@
+{
+  "description": "A form body with no d field.",
+  "account_ids": [
+    "acct_demo"
+  ],
+  "domains": [
+    "demo-store.com"
+  ],
+  "body": "foo=bar",
+  "expect": {
+    "rejection": "invalid_json"
+  }
+}

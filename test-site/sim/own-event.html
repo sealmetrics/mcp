@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>SIM — the site's own /api/event</title>
+  <script src="https://t.sealmetrics.com/t.js?id=acct_demo" defer></script>
+  <script>
+    // The site's own analytics endpoint shares the path name. It is not Sealmetrics
+    // and must be neither captured nor counted.
+    fetch('/api/event', { method: 'POST', body: JSON.stringify({ name: 'page' }) });
+  </script>
+</head>
+<body><h1>Sitio con su propio /api/event</h1></body>
+</html>

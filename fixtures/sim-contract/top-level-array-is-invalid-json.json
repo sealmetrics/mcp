@@ -1,0 +1,13 @@
+{
+  "description": "The payload must be an object.",
+  "account_ids": [
+    "acct_demo"
+  ],
+  "domains": [
+    "demo-store.com"
+  ],
+  "body": "d=%5B%5D",
+  "expect": {
+    "rejection": "invalid_json"
+  }
+}

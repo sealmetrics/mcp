@@ -1,0 +1,13 @@
+{
+  "description": "Go's ParseQuery rejects ';' separators.",
+  "account_ids": [
+    "acct_demo"
+  ],
+  "domains": [
+    "demo-store.com"
+  ],
+  "body": "d=%7B%22a%22%3A%22acct_demo%22%2C%22s%22%3A%2211345406193%22%2C%22t%22%3A%22MTc2NzI2ODgwMDowMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMA%22%2C%22u%22%3A%22https%3A%2F%2Fdemo-store.com%2Fcheckout%2Fsuccess%22%2C%22r%22%3A%22https%3A%2F%2Fdemo-store.com%2Fcheckout%22%2C%22z%22%3A%22Europe%2FMadrid%22%2C%22c%22%3A1767268800000%7D;x=1",
+  "expect": {
+    "rejection": "invalid_json"
+  }
+}

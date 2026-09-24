@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>SIM — conv() before a deferred tracker, no stub</title>
+  <script src="https://t.sealmetrics.com/t.js?id=acct_demo" defer></script>
+  <script>
+    // Runs while the page parses; the deferred tracker has not run yet.
+    sealmetrics.conv('purchase', 149.99, { currency: 'EUR', items: [{ product_id: 'SKU-123', quantity: 1, price: 149.99 }] });
+  </script>
+</head>
+<body><h1>Gracias por tu compra</h1></body>
+</html>

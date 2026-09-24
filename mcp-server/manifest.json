@@ -1,0 +1,67 @@
+{
+  "manifest_version": "0.3",
+  "name": "sealmetrics",
+  "display_name": "Sealmetrics Analytics",
+  "version": "1.10.2",
+  "description": "Privacy-first, cookieless web analytics in Claude. Register a free Sealmetrics site from the chat, place the tracker, and query your traffic & conversions — no terminal needed.",
+  "long_description": "Sealmetrics is GDPR-compliant, cookieless analytics. This Desktop Extension lets Claude:\n\n- **Register a new free site from the chat** (no account or terminal required): `provision_site` creates the account, returns the tracker snippet to paste in your site's `<head>`, and emails you a claim link to set a password.\n- **Verify the install** (`verify_setup`) and **instrument events** with the canonical taxonomy + privacy rules (`get_instrumentation_guide`, `verify_event_instrumented`).\n- **Query your analytics** through ~47 read-only tools (traffic, pages, conversions, audience, channels, funnels, bots, and more) once an api_key is available.\n\nLeave the API key empty to register a new site from the chat; paste an existing read-only api_key to query data immediately. The api_key is read-only and scoped to your account.",
+  "author": {
+    "name": "Sealmetrics",
+    "url": "https://github.com/sealmetrics",
+    "email": "dev@sealmetrics.com"
+  },
+  "homepage": "https://sealmetrics.com",
+  "documentation": "https://docs.sealmetrics.com/integrations/mcp-server",
+  "support": "https://github.com/sealmetrics/mcp/issues",
+  "privacy_policies": ["https://sealmetrics.com/privacy/"],
+  "icon": "assets/icon.png",
+  "license": "MIT",
+  "keywords": ["analytics", "mcp", "sealmetrics", "privacy", "cookieless", "gdpr"],
+  "server": {
+    "type": "node",
+    "entry_point": "server/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/server/index.js"],
+      "env": {
+        "SEALMETRICS_API_KEY": "${user_config.api_key}",
+        "SEALMETRICS_BASE_URL": "${user_config.base_url}"
+      }
+    }
+  },
+  "tools_generated": true,
+  "tools": [
+    { "name": "provision_site", "description": "Register a NEW free SealMetrics site from the chat (write). Returns the snippet to place; emails a claim link." },
+    { "name": "verify_setup", "description": "Poll until the pixel is confirmed installed (read-only)." },
+    { "name": "get_setup_status", "description": "Report whether a site is provisioned and its pixel verified (read-only)." },
+    { "name": "detect_framework", "description": "Best-effort detect the project framework/CMS to place the snippet (read-only)." },
+    { "name": "get_instrumentation_guide", "description": "Canonical event-instrumentation guide with your account_id (read-only)." },
+    { "name": "verify_event_instrumented", "description": "Confirm a conv()/micro() event reached the backend; validate taxonomy + reject PII (read-only)." },
+    { "name": "plan_install", "description": "Validate an install plan before writing code: taxonomy, PII, revenue type, pageview mode, domains, payload size; returns a plan_id to approve (read-only)." },
+    { "name": "simulate_install", "description": "Run the planned tracker calls in a local sandbox, or drive your dev server in a local browser, and check what pixel-service would store or reject; simulated, not verified. Executes the given calls locally, so it asks before running." },
+    { "name": "get_marketing_playbook", "description": "Return the step-by-step method to analyze marketing performance; auto-invoked for marketing/weekly/channel reports, then orchestrates the read-only data tools (read-only)." }
+  ],
+  "user_config": {
+    "api_key": {
+      "type": "string",
+      "title": "SealMetrics API key (optional)",
+      "description": "Leave EMPTY to register a new site from the chat (the read-only tools turn on automatically after you provision). Paste an existing read-only api_key to query your data immediately. Find it in your welcome email or at Settings > API Tokens.",
+      "sensitive": true,
+      "required": false
+    },
+    "base_url": {
+      "type": "string",
+      "title": "API base URL (advanced)",
+      "description": "SealMetrics API base URL. Leave the default unless instructed otherwise.",
+      "default": "https://my.sealmetrics.com/api/v1",
+      "required": false
+    }
+  },
+  "compatibility": {
+    "claude_desktop": ">=0.10.0",
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": {
+      "node": ">=18.0.0"
+    }
+  }
+}

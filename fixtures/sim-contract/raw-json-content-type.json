@@ -1,0 +1,22 @@
+{
+  "description": "Any other content type is read as raw JSON.",
+  "account_ids": [
+    "acct_demo"
+  ],
+  "domains": [
+    "demo-store.com"
+  ],
+  "content_type": "text/plain;charset=UTF-8",
+  "body": "{\"a\":\"acct_demo\",\"s\":\"11345406193\",\"t\":\"MTc2NzI2ODgwMDowMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMA\",\"u\":\"https://demo-store.com/checkout/success\",\"r\":\"https://demo-store.com/checkout\",\"z\":\"Europe/Madrid\",\"c\":1767268800000}",
+  "expect": {
+    "rejection": "",
+    "stored_as": {
+      "event_type": "pageview",
+      "conversion_type": "",
+      "amount": 0,
+      "is_micro": false,
+      "content_grouping": "",
+      "properties": {}
+    }
+  }
+}

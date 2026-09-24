@@ -1,0 +1,74 @@
+{
+  "name": "@sealmetrics/mcp",
+  "version": "1.10.2",
+  "description": "Sealmetrics analytics MCP server for Claude Code and Claude Desktop",
+  "author": "Sealmetrics <dev@sealmetrics.com> (https://github.com/sealmetrics)",
+  "homepage": "https://docs.sealmetrics.com/integrations/mcp-server",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sealmetrics/mcp.git",
+    "directory": "mcp-server"
+  },
+  "bugs": {
+    "url": "https://github.com/sealmetrics/mcp/issues"
+  },
+  "type": "module",
+  "bin": {
+    "sealmetrics-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "gen-marketing-guide": "node scripts/gen-marketing-guide.mjs",
+    "gen-troubleshooting-guide": "node scripts/gen-troubleshooting-guide.mjs",
+    "prebuild": "npm run gen-marketing-guide && npm run gen-troubleshooting-guide",
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "dev:http": "tsx src/http.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "bundle": "node scripts/bundle.mjs",
+    "pack-mcpb": "node scripts/pack-mcpb.mjs",
+    "prepare": "npm run build && npm run bundle && chmod +x dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "zod": "^3.25 || ^4.0"
+  },
+  "peerDependencies": {
+    "playwright-core": "1.63.0"
+  },
+  "peerDependenciesMeta": {
+    "playwright-core": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@anthropic-ai/mcpb": "^1.0.0",
+    "@sealmetrics/setup-core": "file:../setup-core",
+    "@types/node": "^22.0.0",
+    "esbuild": "^0.24.0",
+    "msw": "^2.7.0",
+    "redis": "^4.7.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.7.0",
+    "vitest": "4.1.5"
+  },
+  "overrides": {
+    "vite": "^7.3.2"
+  },
+  "keywords": [
+    "mcp",
+    "sealmetrics",
+    "analytics",
+    "claude",
+    "model-context-protocol"
+  ],
+  "license": "MIT"
+}

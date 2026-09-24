@@ -1,0 +1,30 @@
+{
+  "description": "//host/path parses with a host and no scheme.",
+  "account_ids": [
+    "acct_demo"
+  ],
+  "domains": [
+    "demo-store.com"
+  ],
+  "payload": {
+    "a": "acct_demo",
+    "s": "11345406193",
+    "t": "MTc2NzI2ODgwMDowMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMA",
+    "u": "//demo-store.com/x",
+    "r": "https://demo-store.com/checkout",
+    "z": "Europe/Madrid",
+    "c": 1767268800000
+  },
+  "body": "d=%7B%22a%22%3A%22acct_demo%22%2C%22s%22%3A%2211345406193%22%2C%22t%22%3A%22MTc2NzI2ODgwMDowMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMA%22%2C%22u%22%3A%22%2F%2Fdemo-store.com%2Fx%22%2C%22r%22%3A%22https%3A%2F%2Fdemo-store.com%2Fcheckout%22%2C%22z%22%3A%22Europe%2FMadrid%22%2C%22c%22%3A1767268800000%7D",
+  "expect": {
+    "rejection": "",
+    "stored_as": {
+      "event_type": "pageview",
+      "conversion_type": "",
+      "amount": 0,
+      "is_micro": false,
+      "content_grouping": "",
+      "properties": {}
+    }
+  }
+}
