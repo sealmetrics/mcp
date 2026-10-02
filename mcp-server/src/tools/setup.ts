@@ -80,7 +80,7 @@ export interface SetupContext {
   state: SetupState;
   /**
    * Called after a successful provision_site so the server adopts the api_key and
-   * enables the ~47 read-only tools in the same session (RF-3202b). The api_key is
+   * enables the ~52 read-only tools in the same session (RF-3202b). The api_key is
    * passed here but NEVER returned to the model (VAL-3201).
    */
   onProvisioned: (apiKey: string, accountId: string) => void;

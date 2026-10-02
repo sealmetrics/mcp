@@ -10,6 +10,7 @@ import {
   resolveSiteId,
   COUNTRY_SCHEMA,
   countryParam,
+  SITE_ID_SCHEMA,
 } from "./shared.js";
 import type { ToolDef } from "./index.js";
 
@@ -20,10 +21,7 @@ export const getChannelsTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID (account_id). Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -48,14 +46,11 @@ export const getChannelsTool: ToolDef = {
 export const getTopChannelsTool: ToolDef = {
   name: "get_top_channels",
   description:
-    "Get top channels ranked by entrances. Returns a compact list of the top N channels (Paid Search, Organic, Social, etc.) — ideal for quick rankings.",
+    "Get top channels ranked by entrances. Returns a compact list of the top N channels (Paid Search, Organic, Social, etc.) with no pagination. For paginated results use get_channels.",
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -80,10 +75,7 @@ export const listChannelRulesTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID (account_id). Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       include_inactive: {
         type: "boolean",
         description: "Include inactive rules (default: false).",
@@ -194,10 +186,7 @@ export const testChannelRulesTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID (account_id). Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       source: { type: "string", description: "utm_source value to classify (e.g. 'google')." },
       medium: { type: "string", description: "utm_medium value to classify (e.g. 'cpc')." },
       campaign: { type: "string", description: "utm_campaign value to classify (optional)." },
@@ -233,10 +222,7 @@ export const createChannelRuleTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID (account_id). Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       channel_name: {
         type: "string",
         description: "Destination channel name (max 50 chars), e.g. 'Paid Social'.",
@@ -292,10 +278,7 @@ export const updateChannelRuleTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID (account_id). Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       rule_id: { type: "number", description: "ID of the draft rule to update." },
       channel_name: { type: "string", description: "New destination channel name (max 50 chars)." },
       source_pattern: { type: "string", description: "New RE2 regex for utm_source." },
@@ -342,10 +325,7 @@ export const deleteChannelRuleTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID (account_id). Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       rule_id: { type: "number", description: "ID of the draft rule to delete." },
     },
     required: ["rule_id"],
@@ -381,10 +361,7 @@ export const importChannelRulesTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID (account_id). Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       rules: {
         type: "array",
         description:

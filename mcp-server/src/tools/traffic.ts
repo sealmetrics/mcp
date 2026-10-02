@@ -12,6 +12,7 @@ import {
   COUNTRY_SCHEMA,
   countryParam,
   LANDING_PAGE_SCHEMA,
+  SITE_ID_SCHEMA,
 } from "./shared.js";
 import type { ToolDef } from "./index.js";
 
@@ -41,10 +42,7 @@ export const getTrafficSourcesTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -70,10 +68,7 @@ export const getTrafficMediumsTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -99,10 +94,7 @@ export const getCampaignsTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -138,10 +130,7 @@ export const getTermsTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -188,15 +177,12 @@ function topNParams(args: Record<string, unknown>): Record<string, string | unde
 export const getTopSourcesTool: ToolDef = {
   name: "get_top_sources",
   description:
-    "Get top traffic sources ranked by entrances. Returns a compact list of the top N sources (utm_source) without pagination — ideal for quick rankings and summaries. " +
+    "Get top traffic sources ranked by entrances. Returns a compact list of the top N sources (utm_source) — no period comparison, sorting or pagination. For compare, other sort orders or more rows, use get_traffic_sources. " +
     "Pass landing_page to see which sources brought the sessions that entered on one specific page.",
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -225,14 +211,11 @@ export const getTopSourcesTool: ToolDef = {
 export const getTopCampaignsTool: ToolDef = {
   name: "get_top_campaigns",
   description:
-    "Get top campaigns ranked by entrances. Returns a compact list of the top N campaigns (utm_campaign) — ideal for quick rankings.",
+    "Get top campaigns ranked by entrances. Returns a compact list of the top N campaigns (utm_campaign) — no period comparison, sorting or pagination. For compare, other sort orders or more rows, use get_campaigns.",
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -260,14 +243,11 @@ export const getTopCampaignsTool: ToolDef = {
 export const getTopTermsTool: ToolDef = {
   name: "get_top_terms",
   description:
-    "Get top UTM terms (keywords) ranked by entrances. Returns a compact list of the top N terms — ideal for quick keyword rankings.",
+    "Get top UTM terms (keywords) ranked by entrances. Returns a compact list of the top N terms — no period comparison, sorting or pagination. For compare, other sort orders or more rows, use get_terms.",
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -304,10 +284,7 @@ export const getTopReferrersTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,

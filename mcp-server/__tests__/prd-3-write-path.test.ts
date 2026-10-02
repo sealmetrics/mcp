@@ -179,7 +179,7 @@ describe("TEST-3206: provision_site enables read-only tools in the same session"
       accept_terms: true,
     });
 
-    // RF-3202b: the ~47 read-only tools are now enabled (tools/list_changed effect).
+    // RF-3202b: the ~52 read-only tools are now enabled (tools/list_changed effect).
     expect(built.readOnlyHandles.every((h) => h.enabled === true)).toBe(true);
     // The adopted key works for read-only requests now.
     expect(built.client.hasApiKey()).toBe(true);

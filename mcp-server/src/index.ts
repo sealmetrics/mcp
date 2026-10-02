@@ -22,7 +22,7 @@ const BASE_URL =
 
 // Relaxed startup gate (RF-3202): no process.exit when SEALMETRICS_API_KEY is
 // missing. Without a key the server starts in SETUP-ONLY mode (only the setup
-// tools are exposed); the ~47 read-only data tools stay hidden until a key is
+// tools are exposed); the ~52 read-only data tools stay hidden until a key is
 // present — set in the env at boot, or adopted at runtime from provision_site
 // (RF-3202b). With a key, the read-only tools behave exactly as in v1.2.0 and the
 // setup tools are added on top (VAL-3202).

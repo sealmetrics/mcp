@@ -7,6 +7,7 @@ import {
   resolveSiteId,
   COUNTRY_SCHEMA,
   countryParam,
+  SITE_ID_SCHEMA,
 } from "./shared.js";
 import type { ToolDef } from "./index.js";
 
@@ -17,10 +18,7 @@ export const getContentGroupsTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,

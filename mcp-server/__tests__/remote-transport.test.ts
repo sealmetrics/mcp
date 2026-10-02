@@ -151,6 +151,10 @@ const TOOLS_LIST = { jsonrpc: "2.0", id: 2, method: "tools/list", params: {} };
 type RemoteTool = {
   name: string;
   annotations?: { readOnlyHint?: boolean; openWorldHint?: boolean; destructiveHint?: boolean };
+  inputSchema?: {
+    required?: string[];
+    properties?: Record<string, { description?: string }>;
+  };
 };
 
 async function listRemoteToolsFull(): Promise<RemoteTool[]> {
@@ -272,6 +276,20 @@ describe("RF-RMT12 — protected resource metadata (RFC 9728)", () => {
   it("serves the path-scoped variant /mcp too", async () => {
     const response = await fetch(`${baseUrl}/.well-known/oauth-protected-resource/mcp`);
     expect(response.status).toBe(200);
+  });
+});
+
+describe("input schemas on the remote surface", () => {
+  it("publishes required arguments over HTTP", async () => {
+    const tools = await listRemoteToolsFull();
+    const propertyValues = tools.find((tool) => tool.name === "get_property_values");
+    expect(propertyValues?.inputSchema?.required).toEqual(["property_key"]);
+  });
+
+  it("describes site_id without the stdio-only env var as the way to omit it", async () => {
+    const tools = await listRemoteToolsFull();
+    const overview = tools.find((tool) => tool.name === "get_overview");
+    expect(overview?.inputSchema?.properties?.site_id?.description).toMatch(/list_sites/);
   });
 });
 

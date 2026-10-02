@@ -1,18 +1,15 @@
 import type { SealMetricsClient } from "../client.js";
-import { LIMIT_SCHEMA, resolveSiteId } from "./shared.js";
+import { LIMIT_SCHEMA, resolveSiteId, SITE_ID_SCHEMA } from "./shared.js";
 import type { ToolDef } from "./index.js";
 
 export const getBotStatsTool: ToolDef = {
   name: "get_bot_stats",
   description:
-    "Get bot detection overview: score distribution, top suspicion flags, and daily trend of human vs suspected-bot traffic. Requires agent analytics to be enabled on the site.",
+    "Get bot detection overview: score distribution, top suspicion flags, and daily trend of human vs suspected-bot traffic over the last `days`. Data exists only when agent analytics is enabled on the site; otherwise the result is zero-filled (total_hits: 0), not an error, and must not be read as a 0% bot share.",
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID (account_id). Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       days: {
         type: "number",
         description: "Number of days to analyze (1-90, default: 30).",
@@ -35,10 +32,7 @@ export const getSuspiciousSessionsTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID (account_id). Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       min_score: {
         type: "number",
         description: "Minimum suspicion score threshold (1-100, default: 50).",

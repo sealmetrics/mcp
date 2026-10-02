@@ -213,17 +213,46 @@ export const COUNTRIES_RESPONSE = {
   timestamp: "2026-02-25T12:00:00Z",
 };
 
+/** GET /stats/funnel: FunnelResponse itself, no APIResponse envelope. */
 export const FUNNEL_RESPONSE = {
-  success: true,
-  data: {
-    steps: [
-      { name: "Homepage", count: 5000, rate: 100, dropoff: 0 },
-      { name: "Product Page", count: 2000, rate: 40, dropoff: 60 },
-      { name: "Add to Cart", count: 500, rate: 25, dropoff: 75 },
-      { name: "Purchase", count: 80, rate: 16, dropoff: 84 },
-    ],
-    total_entrances: 5000,
-    overall_conversion_rate: 1.6,
+  account_id: "my-store",
+  date_from: "2026-01-26",
+  date_to: "2026-02-24",
+  microconversion_types: ["add_to_cart"],
+  conversion_types: ["purchase"],
+  rows: [
+    {
+      utm_source: "google",
+      utm_medium: "cpc",
+      utm_campaign: "brand",
+      utm_term: "(none)",
+      entrances: 3000,
+      page_views: 9000,
+      microconversions: { add_to_cart: 300 },
+      conversions: { purchase: 50 },
+      revenue: { purchase: 2500 },
+    },
+    {
+      utm_source: "(direct)",
+      utm_medium: "(none)",
+      utm_campaign: "(none)",
+      utm_term: "(none)",
+      entrances: 2000,
+      page_views: 5000,
+      microconversions: { add_to_cart: 200 },
+      conversions: { purchase: 30 },
+      revenue: { purchase: 1500 },
+    },
+  ],
+  totals: {
+    utm_source: "",
+    utm_medium: "",
+    utm_campaign: "",
+    utm_term: "",
+    entrances: 5000,
+    page_views: 14000,
+    microconversions: { add_to_cart: 500 },
+    conversions: { purchase: 80 },
+    revenue: { purchase: 4000 },
   },
-  timestamp: "2026-02-25T12:00:00Z",
 };

@@ -7,10 +7,16 @@ description: Validated symptom→cause→fix answers for the most common SealMet
 
 You are helping a SealMetrics user diagnose a setup or data problem. This guide
 contains **validated support resolutions** — each entry is a real, recurring
-question answered symptom → cause → fix. Do not guess beyond it: follow the
-matching entry, use the verification tools it lists to confirm with the user's
-real data, and if nothing matches, say so and suggest contacting SealMetrics
-support (see the last section for what to include).
+question answered symptom → cause → fix. Follow the matching entry and use the
+verification tools it lists to confirm with the user's real data. If nothing
+matches, say so, check the documentation with `search_docs`, and if that does not
+resolve it either, suggest contacting SealMetrics support (see the last section
+for what to include).
+
+The setup tools (`verify_setup`, `get_setup_status`, `verify_event_instrumented`)
+exist only on the local MCP server, not on hosted connectors. Where this guide
+names them and they are not in your tool list, use `get_overview` with
+`period: "today"` and the `*_raw` tools to check what was stored instead.
 
 Find the symptom first:
 
@@ -395,8 +401,9 @@ be an ISO-3166-1 alpha-2 code...`.
 
 **Cause**: `country` takes the **ISO-3166-1 alpha-2 code**, not the country
 name — `ES`, not `Spain`; `US`, not `United States`. Casing does not matter
-(`es` works). A name was previously dropped or errored out depending on the
-report, which is why some numbers looked filtered when they were not.
+(`es` works). A country name is rejected with an error. If the user saw numbers
+that did not change with a country name in an earlier session, those numbers were
+unfiltered.
 
 **Fix**
 
@@ -415,8 +422,8 @@ bucket.
 
 **Not every report accepts a country filter.** The property reports
 (`get_property_breakdown`, `get_property_values`, `list_property_keys`) do not.
-If a tool does not declare `country`, passing it is now an explicit error
-naming the arguments it does accept — never a silently unfiltered answer.
+If a tool does not declare `country`, passing it is an explicit error naming
+the arguments it does accept.
 
 ---
 

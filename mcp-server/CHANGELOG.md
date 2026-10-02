@@ -7,7 +7,7 @@ this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 _History before 1.2.0 is not maintained here — see `git log mcp-server/` for
 earlier changes._
 
-## [1.10.2] — 2026-09-22
+## [1.11.1] — 2026-09-29
 
 ### Changed — ready for Anthropic's Desktop Extensions directory
 
@@ -26,6 +26,65 @@ earlier changes._
   reads it as `true`, so `provision_site` and `create_channel_rule`, which only
   add, looked destructive. `update_channel_rule`, `delete_channel_rule` and
   `import_channel_rules` declare `true`.
+
+## [1.11.0] — 2026-09-24
+
+### Added — `get_funnel` llega a fuentes pequeñas
+
+- **`utm_source` / `utm_medium` / `utm_campaign`** (match exacto,
+  case-insensitive): se envían al API como `filters=field:eq:value`, así el
+  top-N se calcula dentro del subconjunto filtrado. Un valor con coma se
+  rechaza en vez de partirse en otro filtro.
+- **`limit`** (default 100, máx. 500; el API admite 10.000 para el export CSV
+  del dashboard, demasiadas filas para un modelo).
+- La respuesta trae **`truncated`** cuando hay más combinaciones UTM que las
+  devueltas; la descripción le dice al modelo que filtre en ese caso.
+
+## [1.10.2] — 2026-09-23
+
+### Fixed — descripciones que no coincidían con el código
+
+El modelo lee las descripciones y los schemas al pie de la letra; varias
+prometían cosas que el handler o la API no hacen.
+
+- **`get_funnel` fallaba siempre.** `GET /stats/funnel` devuelve el
+  `FunnelResponse` directamente, sin el envoltorio `{success, data}`, y el
+  handler desenvolvía `.data` → `undefined` → "Response could not be
+  serialized". Ahora usa `requestDirect`. La descripción ya no promete
+  "dropoff por paso": devuelve una tabla por UTM (source/medium/campaign/term)
+  con entrances, page_views, conteos por tipo de micro/conversión y revenue, y
+  esos conteos no son secuenciales.
+- **`site_id`** decía en las 51 tools "Optional if SEALMETRICS_SITE_ID env var is
+  set", falso en el conector remoto (no hay env var). Ahora es un único
+  `SITE_ID_SCHEMA` válido para ambos transportes y apunta a `list_sites`.
+- **`required` se publica en el JSON Schema listado.** `buildShape` marcaba
+  todas las claves como opcionales, así que ninguna tool anunciaba sus
+  argumentos obligatorios (`get_segment.segment_id`, `search_docs.query`…). Las
+  claves siguen opcionales en Zod para que el handler dé su error legible.
+- **Raw tools (`*_raw`):** el tope de 100 filas solo existía en el texto (la API
+  acepta hasta 10000); ahora el handler lo aplica. La descripción ya no habla de
+  `page_size` (el argumento es `limit`) y deja claro que más de 31 días es un
+  error, no un recorte.
+- **`list_segments` / `get_segment`:** ninguna tool acepta un argumento
+  `segment`; `get_segment` devuelve la definición, sin métricas.
+- **`get_bot_stats`:** sin agent analytics devuelve ceros, no un error; no debe
+  leerse como 0 % de bots. **`get_countries`:** documenta el bucket `Unknown` y
+  que el país sale del timezone del navegador.
+- **`get_top_*`:** cada una dice qué le falta frente a su versión completa
+  (compare, orden, paginación) y cuál usar. **`search`/`fetch`** (remoto)
+  remiten a las tools con nombre y a `search_docs`.
+- **Triggers:** `get_troubleshooting_guide` y `get_marketing_playbook` ya no
+  dicen "Call this FIRST whenever…" con un alcance tan amplio: el primero es para
+  síntomas (las preguntas de uso van a `search_docs`) y el segundo no hace falta
+  para consultar una sola métrica.
+- **Playbook de marketing:** corregidos hechos falsos (métricas por segmento,
+  raw tools "sin `period`", `compare` ignorado en silencio, definición de sesión
+  engaged tras PRD-042); los pasos de bots y segmentos se saltan si sus tools no
+  están en la conexión; los pasos completos son para un informe completo, no
+  para una pregunta concreta.
+- **Guía de troubleshooting:** si ninguna entrada encaja, consultar
+  `search_docs` antes de escalar a soporte; alternativa a las tools de setup en
+  conectores remotos; redactada en presente.
 
 ## [1.10.1] — 2026-09-21
 

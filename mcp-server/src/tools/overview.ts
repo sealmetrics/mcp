@@ -9,6 +9,7 @@ import {
   resolveSiteId,
   COUNTRY_ARRAY_SCHEMA,
   countryListParam,
+  SITE_ID_SCHEMA,
 } from "./shared.js";
 import type { ToolDef } from "./index.js";
 
@@ -19,11 +20,7 @@ export const getOverviewTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description:
-          "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,

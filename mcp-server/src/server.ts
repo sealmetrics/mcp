@@ -1,5 +1,5 @@
 /**
- * Server factory (Fase 3 Bloque 2). Builds the McpServer, registers the ~47
+ * Server factory (Fase 3 Bloque 2). Builds the McpServer, registers the ~52
  * read-only data tools (with `readOnlyHint` and retained handles, RF-3206) and the
  * write-path setup tools, and wires the relaxed startup gate (RF-3202) + dynamic
  * read-only enablement after provisioning (RF-3202b).
@@ -149,12 +149,22 @@ function buildShape(properties: Record<string, unknown>): Record<string, z.ZodTy
  *   answer with a tool error that names the accepted arguments. `.strict()`
  *   alone would instead raise a transport-level `McpError` whose text the
  *   model cannot act on.
+ *
+ * Every key stays `.optional()` in Zod, so a missing required argument still
+ * reaches the handler and gets its readable error; `required` is published
+ * through `.meta()` so the listed schema tells the model up front.
  */
-function buildInputSchema(properties: Record<string, unknown>): z.ZodTypeAny {
+function buildInputSchema(
+  properties: Record<string, unknown>,
+  required?: string[],
+): z.ZodTypeAny {
   return z
     .object(buildShape(properties))
     .passthrough()
-    .meta({ additionalProperties: false }) as unknown as z.ZodTypeAny;
+    .meta({
+      additionalProperties: false,
+      ...(required && required.length > 0 ? { required } : {}),
+    }) as unknown as z.ZodTypeAny;
 }
 
 /**
@@ -213,7 +223,7 @@ export function buildServer(opts: BuildServerOptions): BuiltServer {
     opts.instructions ? { instructions: opts.instructions } : undefined,
   );
 
-  // Read-only data tools (~47): registerTool → readOnlyHint + retained handle.
+  // Read-only data tools (~52): registerTool → readOnlyHint + retained handle.
   // Without an api_key they are registered but DISABLED (hidden from tools/list);
   // provision_site enables them in-session (RF-3202b).
   //
@@ -235,7 +245,7 @@ export function buildServer(opts: BuildServerOptions): BuiltServer {
       tool.name,
       {
         description: tool.description,
-        inputSchema: buildInputSchema(tool.inputSchema.properties),
+        inputSchema: buildInputSchema(tool.inputSchema.properties, tool.inputSchema.required),
         annotations: {
           title: tool.name,
           readOnlyHint: true,
@@ -277,7 +287,7 @@ export function buildServer(opts: BuildServerOptions): BuiltServer {
       tool.name,
       {
         description: tool.description,
-        inputSchema: buildInputSchema(tool.inputSchema.properties),
+        inputSchema: buildInputSchema(tool.inputSchema.properties, tool.inputSchema.required),
         annotations: { title: tool.name, readOnlyHint: false, destructiveHint: tool.destructiveHint },
       },
       // `args` is typed `unknown` because the schema is a Zod object rather
@@ -335,7 +345,7 @@ export function buildServer(opts: BuildServerOptions): BuiltServer {
       tool.name,
       {
         description: tool.description,
-        inputSchema: buildInputSchema(tool.inputSchema.properties),
+        inputSchema: buildInputSchema(tool.inputSchema.properties, tool.inputSchema.required),
         annotations: tool.annotations,
       },
       // `args` is typed `unknown` because the schema is a Zod object rather

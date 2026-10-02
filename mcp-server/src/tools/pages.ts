@@ -13,6 +13,7 @@ import {
   COUNTRY_ARRAY_SCHEMA,
   countryParam,
   countryListParam,
+  SITE_ID_SCHEMA,
 } from "./shared.js";
 import type { ToolDef } from "./index.js";
 
@@ -121,10 +122,7 @@ export const getPagesTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -170,10 +168,7 @@ export const getLandingPagesTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -214,14 +209,11 @@ export const getLandingPagesTool: ToolDef = {
 export const getTopPagesTool: ToolDef = {
   name: "get_top_pages",
   description:
-    "Get top pages ranked by page views. Returns a compact list of the top N pages — ideal for quick rankings and summaries.",
+    "Get top pages ranked by page views. Returns a compact list of the top N pages — no period comparison, sorting or pagination. For compare, other sort orders, more rows, or device/browser/channel/path filters, use get_pages.",
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -262,14 +254,11 @@ export const getTopPagesTool: ToolDef = {
 export const getTopLandingPagesTool: ToolDef = {
   name: "get_top_landing_pages",
   description:
-    "Get top landing pages ranked by entrances. Returns a compact list of the top N landing pages — ideal for quick rankings.",
+    "Get top landing pages ranked by entrances. Returns a compact list of the top N landing pages — no period comparison, sorting or pagination; filterable by content_grouping, which get_landing_pages does not take. For compare, other sort orders, more rows, or device/browser/channel/path filters, use get_landing_pages.",
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -309,10 +298,7 @@ export const getLandingPagesByContentGroupTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,

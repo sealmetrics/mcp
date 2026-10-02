@@ -29,15 +29,14 @@ Use this skill when the user asks any of:
 - "What should I do next?" / "Where should I invest more?"
 - "Give me a marketing report for last month / quarter."
 - "Compare this period to the previous one."
-- Open-ended SealMetrics questions where the user has not specified a tool.
 
 Do **not** use this skill for: pixel installation help, billing questions, account setup, or pure technical SEO audits (broken links, robots.txt, etc.). SealMetrics measures behavior, not crawl health.
 
 ## Output contract
 
-Every run produces a single **structured markdown report** in the user's language (Spanish, English, or whatever the user wrote in). The skill itself is in English; the report is not.
+A full marketing report is a single **structured markdown report** in the user's language (Spanish, English, or whatever the user wrote in). The skill itself is in English; the report is not. For a narrower question (one channel, one campaign, one symptom), run only the steps that answer it and include only those sections, plus the attribution note.
 
-The report must include:
+A full report includes:
 
 1. **TL;DR** — 3-5 bullet headlines. What's working, what's broken, what to do.
 2. **Period & comparison** — explicit dates resolved in the account timezone, plus the comparison baseline used.
@@ -73,7 +72,7 @@ Use markdown tables and inline ASCII bar charts (see Chart conventions). No imag
 **How to interpret / decide**
 
 - Never resolve `period` with the server clock. SealMetrics resolves date ranges in the account timezone — pass one of the **valid preset strings** and let the backend resolve them. Valid values: `today`, `yesterday`, `7d`, `30d`, `90d`, `12m`, `this_week`, `wtd`, `last_week`, `this_month`, `mtd`, `last_month`, `this_quarter`, `qtd`, `last_quarter`, `this_year`, `ytd`, `last_year`. There is **no** `last_30_days`/`last_7_days` form — use `30d`/`7d`.
-- Get comparisons from the tool itself with `compare: "previous"` or `compare: "yoy"` rather than calling it twice. **`compare` is supported only on**: `get_overview`, `get_traffic_sources`, `get_traffic_mediums`, `get_campaigns`, `get_terms`, `get_pages`, `get_landing_pages`, `get_conversions`, `get_microconversions`, `get_countries`, `get_devices`. It is **not** supported on `get_channels`/`get_top_channels`, the `get_top_*` ranked variants, the `*_raw` tools, or the `list_*` tools. When you need a prior-period comparison from a tool that lacks `compare` (notably channel mix in Step 2a), call it twice with a **calendar-pair preset** — `this_month` vs `last_month`, or `this_quarter` vs `last_quarter` — since `30d` has no matching prior-window preset. Passing `compare` to a tool that ignores it returns single-period data silently, so don't rely on it there.
+- Get comparisons from the tool itself with `compare: "previous"` or `compare: "yoy"` rather than calling it twice. **`compare` is supported only on**: `get_overview`, `get_traffic_sources`, `get_traffic_mediums`, `get_campaigns`, `get_terms`, `get_pages`, `get_landing_pages`, `get_conversions`, `get_microconversions`, `get_countries`, `get_devices`. It is **not** supported on `get_channels`/`get_top_channels`, the `get_top_*` ranked variants, the `*_raw` tools, or the `list_*` tools. When you need a prior-period comparison from a tool that lacks `compare` (notably channel mix in Step 2a), call it twice with a **calendar-pair preset** — `this_month` vs `last_month`, or `this_quarter` vs `last_quarter` — since `30d` has no matching prior-window preset. Tools that do not list `compare` reject it with an "Unknown argument" error.
 - If the site has < 14 days of data, skip YoY and warn the user that comparisons are noisy.
 - If currency is set, format monetary figures with that currency throughout the report.
 
@@ -89,7 +88,7 @@ This single sentence prevents 80% of "but my Google Ads dashboard says..." follo
 
 ## Steps
 
-Run the steps in order. Skip a step only if its data is empty or not configured (the skill explicitly says when this is OK).
+For a full report, run the steps in order and skip a step only if its data is empty, not configured, or its tools are unavailable on this connection.
 
 ---
 
@@ -264,7 +263,7 @@ If content groups are not configured, skip this sub-step and note it as a setup 
 
 **Goal**: explain *what* converted and *which steps* are leaking.
 
-**Tools**: `get_conversions`, `list_microconversion_types`, `get_microconversions`. Use `get_conversions_raw` and `get_microconversions_raw` only when the user asks for an audit-level breakdown — they are heavier and **constrained**: they take `start_date`/`end_date` (not `period`), the range is **capped at 31 days**, and they return **≤ 100 rows**. Never use them for the 30d+ macro windows — use the aggregated tools for those.
+**Tools**: `get_conversions`, `list_microconversion_types`, `get_microconversions`. Use `get_conversions_raw` and `get_microconversions_raw` only when the user asks for an audit-level breakdown — they are heavier and **constrained**: ranges longer than 31 days are rejected (so `90d`, `12m` or `this_quarter` fail; `30d`, `last_month` or `start_date`/`end_date` work), and each call returns at most 100 rows. Use the aggregated tools for macro windows.
 
 **Read conversions**:
 
@@ -324,6 +323,8 @@ demo_conversion       |      262 |     48.5% | ██████████░
 
 **Tools**: `get_bot_stats`, `get_suspicious_sessions`.
 
+These tools are not available on every connection (hosted connectors do not expose them). If they are not in your tool list, skip this step and say once that traffic-quality data is not available over this connection.
+
 **Always include this disclaimer in the report (in the user's language)**:
 
 > Traffic quality and agentic-traffic detection are currently in **beta** in SealMetrics. The numbers in this section are useful as directional signals, not as accounting truth. We are actively improving classification accuracy.
@@ -348,10 +349,12 @@ Handle the two non-data cases distinctly — `get_bot_stats` does **not** return
 
 **Tools**: `list_segments`, `get_segment`, `list_property_keys`, `get_property_values`, `get_property_breakdown`.
 
+`list_segments` and `get_segment` are not exposed on hosted connectors; if they are missing, skip the segment part and do the property part.
+
 **Flow**:
 
 1. Call `list_segments`. If empty → skip and note in the action plan: *"No segments configured. Set up at least one segment for your highest-value audience (e.g. 'logged-in users', 'returning visitors') — it makes monthly reads 10× more diagnostic."*
-2. If segments exist, for each high-priority segment call `get_segment` and report its size, share of conversions, and how its metrics compare to the site average. A segment that is 8% of sessions but 35% of conversions is a goldmine — recommend dedicated landing pages and creative for it.
+2. If segments exist, call `get_segment` for the high-priority ones. It returns the segment's filter definition only, with no metrics, and the report tools take no segment argument. Where the filters map to named arguments (country, device_type, channel_group, utm_*), re-run the relevant report with them and compare against the site total; otherwise describe the segment and say its metrics are only available in the dashboard. A segment that is 8% of sessions but 35% of conversions is a goldmine — recommend dedicated landing pages and creative for it.
 3. Call `list_property_keys`. For up to 3 of the most informative keys (typical examples: `pricing_plan`, `industry`, `signup_source`), call `get_property_breakdown` to surface **counts and revenue** by property value (these tools return distribution and revenue per value, **not** a per-value conversion rate — don't promise one).
 4. If no property keys exist → invite the user to instrument key events with custom properties so future reports can answer "which *kind* of customer is converting."
 
@@ -361,7 +364,7 @@ Do **not** dump every segment and every property. Pick the ones that change the 
 
 ## The "why" decision trees
 
-These are the diagnostic playbooks Claude runs when the data shows a specific symptom. Always run them — they convert the report from a data dump into an explanation.
+These are the diagnostic playbooks to run when the data shows the matching symptom — they convert the report from a data dump into an explanation.
 
 ### Symptom A — Conversion rate dropped (most common request)
 
@@ -486,7 +489,7 @@ Cap at 7 actions. More than that and the CMO does none of them.
 - **Do not dump every breakdown.** The CMO does not want 14 tables. Show only the breakdowns that explain the macro change or recommend an action.
 - **Do not recommend killing an awareness or top-of-funnel campaign on direct-conversion data alone.** Note the last non-direct-click attribution caveat and suggest a multi-week assisted-effect read.
 - **Do not declare causation from one period of data.** Use language like "the most likely explanation," "consistent with," "candidate causes." Reserve "caused" for cases where the user already confirmed the timeline (e.g. "we paused the campaign on the 10th").
-- **Do not skip the bot/agent section even when it's beta.** Surface it with the disclaimer. Ignoring traffic quality is how marketers fool themselves.
+- **Do not skip the bot/agent section because it's beta.** When the tools are available, surface it with the disclaimer. Ignoring traffic quality is how marketers fool themselves.
 - **Do not assume segments or custom properties exist.** Probe with `list_segments` / `list_property_keys`. If empty, invite setup — don't fabricate.
 - **Do not call `*_raw` tools by default.** They return higher-cardinality data; use them only when the user asks for an audit or when a small-N section needs validation.
 - **Do not call `get_terms` or `get_landing_pages_by_content_group` first.** They are drill-downs. Start from `get_overview` → `get_channels` and only drill where Step 1 and 2 point you.
@@ -554,7 +557,7 @@ A 3-5 sentence causal narrative tying the sections together. State confidence an
 - **Session**: a visit by a single browser, bounded by inactivity timeout.
 - **Conversion**: a goal completion as configured by the site (purchase, signup, demo, etc.).
 - **Microconversion**: an in-session intent signal short of full conversion (pricing view, scroll depth, CTA click).
-- **Engaged session**: a session with more than one pageview or a meaningful interaction.
+- **Engaged session**: a session with more than one pageview (microconversions do not count toward engagement).
 - **Bounce rate**: `(entrances − engaged entrances) / entrances`. SealMetrics computes bounce, not engagement rate.
 - **Last non-direct click**: attribution model that credits the last channel before conversion that is not a direct visit.
 - **Consentless**: measurement done server-side without setting identifiers in the browser; no cookie banner required for this data.

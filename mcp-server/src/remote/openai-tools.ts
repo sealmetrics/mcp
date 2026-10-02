@@ -181,14 +181,20 @@ export function createOpenAICompatTools(ctx: OpenAICompatContext): ToolDef[] {
     return data.sites ?? [];
   }
 
+  // search/fetch exist for clients that only speak this pair (ChatGPT); the
+  // named report tools sit beside them and are the richer path.
+  const namedToolsHint =
+    " This is a simple entry point with no filters: when the named report tools (get_overview, get_channels, …) are available, " +
+    "they take filters and period comparisons and are the better choice. For SealMetrics documentation use search_docs.";
+
   const searchTool: ToolDef = {
     name: "search",
-    description: multiSite
+    description: (multiSite
       ? "Search the available SealMetrics analytics reports. This connection covers several sites, so name the site (or its domain) in the query — otherwise the results are the list of sites to choose from. " +
         "Pass a result id to `fetch` to get the data. Mention a time range (e.g. 'last 7 days') to scope the reports."
       : "Search the available SealMetrics analytics reports for the connected site. " +
         "Returns report references; pass a result id to `fetch` to get the data. " +
-        "Mention a time range in the query (e.g. 'last 7 days') to scope the reports.",
+        "Mention a time range in the query (e.g. 'last 7 days') to scope the reports.") + namedToolsHint,
     inputSchema: {
       type: "object",
       properties: {

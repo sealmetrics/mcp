@@ -2,9 +2,9 @@
   "manifest_version": "0.3",
   "name": "sealmetrics",
   "display_name": "Sealmetrics Analytics",
-  "version": "1.10.2",
+  "version": "1.11.1",
   "description": "Privacy-first, cookieless web analytics in Claude. Register a free Sealmetrics site from the chat, place the tracker, and query your traffic & conversions — no terminal needed.",
-  "long_description": "Sealmetrics is GDPR-compliant, cookieless analytics. This Desktop Extension lets Claude:\n\n- **Register a new free site from the chat** (no account or terminal required): `provision_site` creates the account, returns the tracker snippet to paste in your site's `<head>`, and emails you a claim link to set a password.\n- **Verify the install** (`verify_setup`) and **instrument events** with the canonical taxonomy + privacy rules (`get_instrumentation_guide`, `verify_event_instrumented`).\n- **Query your analytics** through ~47 read-only tools (traffic, pages, conversions, audience, channels, funnels, bots, and more) once an api_key is available.\n\nLeave the API key empty to register a new site from the chat; paste an existing read-only api_key to query data immediately. The api_key is read-only and scoped to your account.",
+  "long_description": "Sealmetrics is GDPR-compliant, cookieless analytics. This Desktop Extension lets Claude:\n\n- **Register a new free site from the chat** (no account or terminal required): `provision_site` creates the account, returns the tracker snippet to paste in your site's `<head>`, and emails you a claim link to set a password.\n- **Verify the install** (`verify_setup`) and **instrument events** with the canonical taxonomy + privacy rules (`get_instrumentation_guide`, `verify_event_instrumented`).\n- **Query your analytics** through ~52 read-only tools (traffic, pages, conversions, audience, channels, funnels, bots, and more) once an api_key is available.\n\nLeave the API key empty to register a new site from the chat; paste an existing read-only api_key to query data immediately. The api_key is read-only and scoped to your account.",
   "author": {
     "name": "Sealmetrics",
     "url": "https://github.com/sealmetrics",
@@ -31,7 +31,7 @@
   },
   "tools_generated": true,
   "tools": [
-    { "name": "provision_site", "description": "Register a NEW free SealMetrics site from the chat (write). Returns the snippet to place; emails a claim link." },
+    { "name": "provision_site", "description": "Register a NEW free Sealmetrics site from the chat (write). Returns the snippet to place; emails a claim link." },
     { "name": "verify_setup", "description": "Poll until the pixel is confirmed installed (read-only)." },
     { "name": "get_setup_status", "description": "Report whether a site is provisioned and its pixel verified (read-only)." },
     { "name": "detect_framework", "description": "Best-effort detect the project framework/CMS to place the snippet (read-only)." },
@@ -44,7 +44,7 @@
   "user_config": {
     "api_key": {
       "type": "string",
-      "title": "SealMetrics API key (optional)",
+      "title": "Sealmetrics API key (optional)",
       "description": "Leave EMPTY to register a new site from the chat (the read-only tools turn on automatically after you provision). Paste an existing read-only api_key to query your data immediately. Find it in your welcome email or at Settings > API Tokens.",
       "sensitive": true,
       "required": false
@@ -52,7 +52,7 @@
     "base_url": {
       "type": "string",
       "title": "API base URL (advanced)",
-      "description": "SealMetrics API base URL. Leave the default unless instructed otherwise.",
+      "description": "Sealmetrics API base URL. Leave the default unless instructed otherwise.",
       "default": "https://my.sealmetrics.com/api/v1",
       "required": false
     }

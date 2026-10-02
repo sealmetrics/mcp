@@ -173,6 +173,17 @@ export const LANDING_PAGE_ARRAY_SCHEMA = {
     "Filter by entry path, exact match, case-insensitive (e.g. '/camisetas-personalizadas/' or a list of paths). The trailing slash matters. Copy the value from get_top_landing_pages.",
 } as const;
 
+/**
+ * The `site_id` argument, shared by every site-scoped tool. Worded for both
+ * transports: a remote grant that covers one site applies it automatically,
+ * and SEALMETRICS_SITE_ID only exists on the local stdio server.
+ */
+export const SITE_ID_SCHEMA = {
+  type: "string",
+  description:
+    "Site ID (the site_id / account_id from list_sites). Omit it only when the connection has a default site: a hosted connection that covers exactly one site, or a local server started with SEALMETRICS_SITE_ID.",
+} as const;
+
 const STDIO_SITE_ID_HINT =
   "Either pass it as a parameter or set the SEALMETRICS_SITE_ID environment variable.";
 

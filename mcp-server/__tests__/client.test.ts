@@ -327,13 +327,14 @@ describe("Tool handlers", () => {
     expect(result.by_os).toBeDefined();
   });
 
-  it("get_funnel returns funnel steps", async () => {
+  it("get_funnel returns the UTM rows and totals", async () => {
     const { getFunnelTool } = await import("../src/tools/funnel.js");
     const result = (await getFunnelTool.handler(client, {
       site_id: "my-store",
-    })) as { steps: unknown[]; overall_conversion_rate: number };
-    expect(result.steps).toHaveLength(4);
-    expect(result.overall_conversion_rate).toBe(1.6);
+    })) as { rows: unknown[]; totals: { entrances: number; conversions: Record<string, number> } };
+    expect(result.rows).toHaveLength(2);
+    expect(result.totals.entrances).toBe(5000);
+    expect(result.totals.conversions.purchase).toBe(80);
   });
 });
 

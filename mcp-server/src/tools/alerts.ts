@@ -1,5 +1,5 @@
 import type { SealMetricsClient } from "../client.js";
-import { LIMIT_SCHEMA, resolveSiteId } from "./shared.js";
+import { LIMIT_SCHEMA, resolveSiteId, SITE_ID_SCHEMA } from "./shared.js";
 import type { ToolDef } from "./index.js";
 
 export const listAlertsTool: ToolDef = {
@@ -9,10 +9,7 @@ export const listAlertsTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID (account_id). Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       include_inactive: {
         type: "boolean",
         description: "Include inactive/paused alert rules (default: false).",
@@ -34,10 +31,7 @@ export const getAlertHistoryTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID (account_id). Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       rule_id: {
         type: "number",
         description: "Filter by specific alert rule ID.",
@@ -73,10 +67,7 @@ export const getAlertStatsTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID (account_id). Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
     },
   },
   handler: async (client: SealMetricsClient, args: Record<string, unknown>) => {

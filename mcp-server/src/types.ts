@@ -112,18 +112,29 @@ export interface DeviceMetric {
   bounce_rate: number;
 }
 
-/** Funnel response. */
-export interface FunnelStep {
-  name: string;
-  count: number;
-  rate: number;
-  dropoff: number;
+/** GET /stats/funnel response: one row per UTM combination. */
+export interface FunnelRow {
+  utm_source: string;
+  utm_medium: string;
+  utm_campaign: string;
+  utm_term: string;
+  entrances: number;
+  page_views: number;
+  microconversions: Record<string, number>;
+  conversions: Record<string, number>;
+  revenue: Record<string, number>;
 }
 
 export interface FunnelReport {
-  steps: FunnelStep[];
-  total_entrances: number;
-  overall_conversion_rate: number;
+  account_id: string;
+  date_from: string;
+  date_to: string;
+  microconversion_types: string[];
+  conversion_types: string[];
+  rows: FunnelRow[];
+  totals: FunnelRow;
+  /** True when more UTM combinations exist beyond the requested limit. */
+  truncated?: boolean;
 }
 
 /** Valid period values. */

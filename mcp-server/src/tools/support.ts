@@ -22,13 +22,14 @@ import {
 export const getTroubleshootingGuideTool: ToolDef = {
   name: "get_troubleshooting_guide",
   description:
-    "Call this FIRST whenever the user reports a SealMetrics problem or asks a setup/data question: " +
+    "Call this first when the user reports a SealMetrics problem or a number that looks wrong: " +
     'console errors ("sealmetrics is not defined"), missing conversions or microconversions, tags fired ' +
     "from Google Tag Manager before the tracker loads, duplicate or inflated pageviews (SPAs, virtual " +
     "pageviews), content grouping doubts, channel rules that never match / traffic stuck in Unassigned, " +
     "payment-gateway referrer questions, or numbers that don't match another analytics tool (GA4, " +
     "e-commerce platform). It returns the validated symptom→cause→fix guide; find the matching symptom, " +
     "apply its answer, and use the verification tools it lists to confirm with the user's real data. " +
+    "For how-to or reference questions with no symptom (how to install on a platform, what a metric means), use search_docs instead. " +
     TROUBLESHOOTING_GUIDE_DESCRIPTION,
   inputSchema: {
     type: "object" as const,

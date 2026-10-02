@@ -1,5 +1,5 @@
 import type { SealMetricsClient } from "../client.js";
-import { resolveSiteId } from "./shared.js";
+import { resolveSiteId, SITE_ID_SCHEMA } from "./shared.js";
 import type { ToolDef } from "./index.js";
 
 /** Response shape from GET /sites/{id}/pixel */
@@ -219,10 +219,7 @@ export const getTrackingCodeTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
     },
   },
   handler: async (

@@ -1,18 +1,15 @@
 import type { SealMetricsClient } from "../client.js";
-import { resolveSiteId } from "./shared.js";
+import { resolveSiteId, SITE_ID_SCHEMA } from "./shared.js";
 import type { ToolDef } from "./index.js";
 
 export const listSegmentsTool: ToolDef = {
   name: "list_segments",
   description:
-    "List all segments available for a site. Segments are saved filter sets (e.g. 'Mobile users from Spain', 'Organic traffic') that can be applied to stats queries via the segment parameter.",
+    "List all segments available for a site. Segments are saved filter sets (e.g. 'Mobile users from Spain', 'Organic traffic') defined in the dashboard. The report tools here take no segment argument: to report on a segment, read its filters with get_segment and pass the equivalent named filters (country, device_type, channel_group, utm_*) to a tool that accepts them.",
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID (account_id). Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       include_system: {
         type: "boolean",
         description: "Include system segments like 'All Traffic', 'Direct' (default: true).",
@@ -30,14 +27,11 @@ export const listSegmentsTool: ToolDef = {
 export const getSegmentTool: ToolDef = {
   name: "get_segment",
   description:
-    "Get details of a specific segment including its filter definition. The segment_id can be either the segment ID (seg_xxx) or the segment name.",
+    "Get one segment's definition: id, name, display name, description and its filter conditions. Returns no traffic or conversion metrics. The segment_id can be either the segment ID (seg_xxx) or the segment name.",
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID (account_id). Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       segment_id: {
         type: "string",
         description: "Segment ID (seg_xxx) or segment name.",

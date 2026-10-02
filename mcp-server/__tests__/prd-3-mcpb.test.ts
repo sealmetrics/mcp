@@ -110,8 +110,8 @@ describe("manifest.json — Connectors Directory requirements", () => {
   });
 
   it("uses the Sealmetrics brand spelling in user-facing manifest text", () => {
-    const text = [manifest.display_name, manifest.description, manifest.long_description].join(" ");
-    expect(text).not.toContain("SealMetrics");
+    // Todo el texto que ve el usuario: nombre, descripciones, tools y config de instalación.
+    expect(JSON.stringify(manifest)).not.toContain("SealMetrics");
   });
 
   it("passes the official mcpb schema validation", () => {

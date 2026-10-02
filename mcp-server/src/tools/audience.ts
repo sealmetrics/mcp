@@ -12,20 +12,18 @@ import {
   dateRangeParams,
   COUNTRY_SCHEMA,
   countryParam,
+  SITE_ID_SCHEMA,
 } from "./shared.js";
 import type { ToolDef } from "./index.js";
 
 export const getCountriesTool: ToolDef = {
   name: "get_countries",
   description:
-    "Get traffic broken down by country. Shows entrances, pageviews, conversions, and revenue per country. Country codes follow ISO 3166-1 alpha-2 (e.g. ES=Spain, US=United States).",
+    "Get traffic broken down by country. Shows entrances, pageviews, conversions, and revenue per country. Country codes follow ISO 3166-1 alpha-2 (e.g. ES=Spain, US=United States); 'Unknown' is a real bucket for browsers whose timezone maps to no country. Country is derived from the browser's timezone, not the IP address, so treat splits as directional. The codes returned here are the values other tools accept in their `country` filter.",
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -61,10 +59,7 @@ export const getDevicesTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -89,10 +84,7 @@ export const getBrowsersTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -119,10 +111,7 @@ export const getOperatingSystemsTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -149,10 +138,7 @@ export const getDeviceTypesTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,

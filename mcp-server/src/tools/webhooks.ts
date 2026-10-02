@@ -1,5 +1,5 @@
 import type { SealMetricsClient } from "../client.js";
-import { LIMIT_SCHEMA, resolveSiteId } from "./shared.js";
+import { LIMIT_SCHEMA, resolveSiteId, SITE_ID_SCHEMA } from "./shared.js";
 import type { ToolDef } from "./index.js";
 
 export const listWebhooksTool: ToolDef = {
@@ -9,10 +9,7 @@ export const listWebhooksTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID (account_id). Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       include_inactive: {
         type: "boolean",
         description: "Include inactive webhook endpoints (default: false).",
@@ -42,10 +39,7 @@ export const listWebhookDeliveriesTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID (account_id). Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       endpoint_id: {
         type: "string",
         description: "Webhook endpoint UUID.",
@@ -82,10 +76,7 @@ export const getWebhookStatsTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID (account_id). Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       endpoint_id: {
         type: "string",
         description: "Webhook endpoint UUID.",

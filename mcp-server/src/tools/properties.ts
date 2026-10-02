@@ -7,6 +7,7 @@ import {
   START_DATE_SCHEMA,
   END_DATE_SCHEMA,
   dateRangeParams,
+  SITE_ID_SCHEMA,
 } from "./shared.js";
 import type { ToolDef } from "./index.js";
 
@@ -25,10 +26,7 @@ export const listPropertyKeysTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -51,10 +49,7 @@ export const getPropertyValuesTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       property_key: {
         type: "string",
         description: "The property key to analyze (e.g. 'product_name', 'plan_type').",
@@ -100,10 +95,7 @@ export const getPropertyBreakdownTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       property_key: {
         type: "string",
         description: "The property key to analyze (e.g. 'product_name', 'plan_type').",

@@ -127,9 +127,9 @@ Device type (desktop/mobile/tablet), browser, and OS breakdown in a single call.
 
 ### get_funnel
 
-Funnel analysis with step-by-step conversion rates and dropoff.
+Funnel table broken down by UTM source/medium/campaign/term: entrances, page views, counts per microconversion and conversion type, and revenue per conversion type, plus period totals. Returns the top `limit` UTM combinations by entrances (default 100, max 500); `truncated: true` means more exist — filter by UTM to reach a small source.
 
-**Parameters:** `site_id`, `period`, `country`
+**Parameters:** `site_id`, `period`, `country`, `utm_source`, `utm_medium`, `utm_campaign`, `limit`
 
 ### get_tracking_code
 

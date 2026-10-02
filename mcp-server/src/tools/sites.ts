@@ -1,6 +1,6 @@
 import type { SealMetricsClient } from "../client.js";
 import type { SiteListResponse } from "../types.js";
-import { resolveSiteId } from "./shared.js";
+import { resolveSiteId, SITE_ID_SCHEMA } from "./shared.js";
 import type { ToolDef } from "./index.js";
 
 export const listSitesTool: ToolDef = {
@@ -29,10 +29,7 @@ export const getSiteTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
     },
   },
   handler: async (client: SealMetricsClient, args: Record<string, unknown>) => {

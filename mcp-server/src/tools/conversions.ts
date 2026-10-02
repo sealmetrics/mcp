@@ -14,6 +14,7 @@ import {
   countryParam,
   countryListParam,
   LANDING_PAGE_ARRAY_SCHEMA,
+  SITE_ID_SCHEMA,
 } from "./shared.js";
 import type { ToolDef } from "./index.js";
 
@@ -26,10 +27,7 @@ export const getConversionsTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -78,10 +76,7 @@ export const getMicroconversionsTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -124,10 +119,7 @@ export const listMicroconversionTypesTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       period: PERIOD_SCHEMA,
       start_date: START_DATE_SCHEMA,
       end_date: END_DATE_SCHEMA,
@@ -148,10 +140,7 @@ export const getMicroconversionDetailsTool: ToolDef = {
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       conversion_type: {
         type: "string",
         description: "The microconversion type to get details for (e.g. 'add_to_cart', 'newsletter_signup').",
@@ -224,11 +213,17 @@ export const getMicroconversionDetailsTool: ToolDef = {
 const RAW_LIMIT_SCHEMA = {
   type: "number",
   description:
-    "Maximum number of rows to return (default: 10, max: 100). MCP-side cap to control token usage.",
+    "Maximum number of rows to return (default: 10, max: 100; larger values are capped at 100).",
   default: 10,
   minimum: 1,
   maximum: 100,
 } as const;
+
+/** The API allows far larger pages; the MCP keeps raw rows to 100 per call. */
+function rawLimit(args: Record<string, unknown>): number {
+  const requested = typeof args.limit === "number" ? Math.floor(args.limit) : 10;
+  return Math.min(Math.max(requested, 1), 100);
+}
 
 const RAW_FILTER_KEYS = [
   "conversion_type",
@@ -269,7 +264,7 @@ const RAW_DATE_SCHEMA = {
   period: PERIOD_SCHEMA,
   start_date: {
     ...START_DATE_SCHEMA,
-    description: `${START_DATE_SCHEMA.description} Raw endpoints cap the range at 31 days.`,
+    description: `${START_DATE_SCHEMA.description} Raw endpoints reject ranges longer than 31 days.`,
   },
   end_date: END_DATE_SCHEMA,
 } as const;
@@ -381,14 +376,11 @@ export const getConversionsRawTool: ToolDef = {
     "Use for one-row-per-event detail. " +
     "**For per-product/SKU analysis prefer `get_conversion_items_raw` (always includes item properties like sku, price, quantity).** " +
     "Custom `properties` are excluded by default — pass `include_properties=true` to receive them. " +
-    "Date range capped at 31 days; page_size capped at 100 to control token usage.",
+    "Ranges longer than 31 days are rejected: use a period of 31 days or less (e.g. today, yesterday, 7d, 30d, last_week, last_month) or start_date/end_date. `limit` defaults to 10 and is capped at 100 rows; use `page` for more.",
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       ...RAW_DATE_SCHEMA,
       page: PAGE_SCHEMA,
       limit: RAW_LIMIT_SCHEMA,
@@ -402,7 +394,7 @@ export const getConversionsRawTool: ToolDef = {
     },
   },
   handler: async (client: SealMetricsClient, args: Record<string, unknown>) => {
-    const limit = (args.limit as number) ?? 10;
+    const limit = rawLimit(args);
     const includeProperties = args.include_properties === true;
     const dates = dateRangeParams(args);
     const result = await client.requestPaginated<RawRow>("/stats/conversions/raw", {
@@ -422,14 +414,11 @@ export const getMicroconversionsRawTool: ToolDef = {
     "Returns raw microconversion rows from /stats/microconversions/raw (one row per event, with timestamp_utc and timestamp_local). " +
     "Use for one-row-per-event detail of microconversions (add_to_cart, newsletter_signup, etc.). " +
     "Custom `properties` are excluded by default — pass `include_properties=true` to receive them. " +
-    "Date range capped at 31 days; page_size capped at 100 to control token usage.",
+    "Ranges longer than 31 days are rejected: use a period of 31 days or less (e.g. today, yesterday, 7d, 30d, last_week, last_month) or start_date/end_date. `limit` defaults to 10 and is capped at 100 rows; use `page` for more.",
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       ...RAW_DATE_SCHEMA,
       page: PAGE_SCHEMA,
       limit: RAW_LIMIT_SCHEMA,
@@ -443,7 +432,7 @@ export const getMicroconversionsRawTool: ToolDef = {
     },
   },
   handler: async (client: SealMetricsClient, args: Record<string, unknown>) => {
-    const limit = (args.limit as number) ?? 10;
+    const limit = rawLimit(args);
     const includeProperties = args.include_properties === true;
     const dates = dateRangeParams(args);
     const result = await client.requestPaginated<RawRow>("/stats/microconversions/raw", {
@@ -463,14 +452,11 @@ export const getConversionItemsRawTool: ToolDef = {
     "Returns one row per item inside a conversion (e.g. one row per product in a purchase) from /stats/conversion-items/raw. " +
     "`properties` always included — that's where product_id, sku, price, quantity live. " +
     "**Best tool for per-product analytics.** " +
-    "Date range capped at 31 days; page_size capped at 100 to control token usage.",
+    "Ranges longer than 31 days are rejected: use a period of 31 days or less (e.g. today, yesterday, 7d, 30d, last_week, last_month) or start_date/end_date. `limit` defaults to 10 and is capped at 100 rows; use `page` for more.",
   inputSchema: {
     type: "object" as const,
     properties: {
-      site_id: {
-        type: "string",
-        description: "Site ID. Optional if SEALMETRICS_SITE_ID env var is set.",
-      },
+      site_id: SITE_ID_SCHEMA,
       ...RAW_DATE_SCHEMA,
       page: PAGE_SCHEMA,
       limit: RAW_LIMIT_SCHEMA,
@@ -478,7 +464,7 @@ export const getConversionItemsRawTool: ToolDef = {
     },
   },
   handler: async (client: SealMetricsClient, args: Record<string, unknown>) => {
-    const limit = (args.limit as number) ?? 10;
+    const limit = rawLimit(args);
     const dates = dateRangeParams(args);
     return client.requestPaginated<RawRow>("/stats/conversion-items/raw", {
       site_id: resolveSiteId(args),
