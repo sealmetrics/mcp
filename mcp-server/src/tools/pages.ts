@@ -115,10 +115,9 @@ export const getPagesTool: ToolDef = {
   name: "get_pages",
   description:
     "Get metrics per page URL path: pageviews and entrances. Useful for finding most popular pages and content performance. " +
-    "For bounce rate by entry page, use get_landing_pages instead — bounce is not interpretable at page granularity. " +
+    "No bounce rate: bounce is only meaningful per entry page, not per page viewed. " +
     "Supports multi-value filters (country, device_type, browser, os, channel_group, UTMs) as arrays of strings — e.g. " +
-    "device_type=['mobile'] to filter to mobile only. Pass include=['device'] to also break down metrics by device. " +
-    "The two are orthogonal — combine them as needed.",
+    "device_type=['mobile'] for mobile only. include=['device'] adds a per-device breakdown; filters and include combine.",
   inputSchema: {
     type: "object" as const,
     properties: {
@@ -209,7 +208,7 @@ export const getLandingPagesTool: ToolDef = {
 export const getTopPagesTool: ToolDef = {
   name: "get_top_pages",
   description:
-    "Get top pages ranked by page views. Returns a compact list of the top N pages — no period comparison, sorting or pagination. For compare, other sort orders, more rows, or device/browser/channel/path filters, use get_pages.",
+    "Get the top pages ranked by page views, as a compact list of the top N. No period comparison, sorting, pagination or device/browser/channel/path filters.",
   inputSchema: {
     type: "object" as const,
     properties: {
@@ -254,7 +253,7 @@ export const getTopPagesTool: ToolDef = {
 export const getTopLandingPagesTool: ToolDef = {
   name: "get_top_landing_pages",
   description:
-    "Get top landing pages ranked by entrances. Returns a compact list of the top N landing pages — no period comparison, sorting or pagination; filterable by content_grouping, which get_landing_pages does not take. For compare, other sort orders, more rows, or device/browser/channel/path filters, use get_landing_pages.",
+    "Get the top landing pages ranked by entrances, as a compact list of the top N. Filterable by content_grouping. No period comparison, sorting, pagination or device/browser/channel/path filters.",
   inputSchema: {
     type: "object" as const,
     properties: {

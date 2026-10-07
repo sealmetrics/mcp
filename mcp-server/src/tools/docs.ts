@@ -188,13 +188,11 @@ export function normalizeDocPath(input: string): string {
 export const searchDocsTool: ToolDef = {
   name: "search_docs",
   description:
-    "Search the official SealMetrics documentation (docs.sealmetrics.com), fetched LIVE so it is never stale. " +
-    "Use it when the user asks how a SealMetrics feature works or how to set something up: tracker installation " +
-    "(WordPress, WooCommerce, Shopify, Magento, PrestaShop, Google Tag Manager, React/Next.js/Vue SPAs), " +
-    "conversion and microconversion tracking, UTM/campaign tagging, reports and metrics definitions, API usage, " +
-    "account settings, or privacy/GDPR/consentless questions. Returns matching pages (title, path, description); " +
-    "then call get_doc with a result's path to read the full page. For problem symptoms (errors, numbers that " +
-    "don't match, tags not firing) call get_troubleshooting_guide FIRST — this tool is for reference/how-to content.",
+    "Search the official SealMetrics documentation (docs.sealmetrics.com), fetched live. " +
+    "Covers tracker installation (WordPress, WooCommerce, Shopify, Magento, PrestaShop, Google Tag Manager, " +
+    "React/Next.js/Vue SPAs), conversion and microconversion tracking, UTM/campaign tagging, report and metric " +
+    "definitions, API usage, account settings, and privacy/GDPR/consentless questions. " +
+    "Returns matching pages with title, path and description.",
   inputSchema: {
     type: "object" as const,
     properties: {
@@ -242,14 +240,14 @@ export const getDocTool: ToolDef = {
   name: "get_doc",
   description:
     "Read one page of the official SealMetrics documentation as plain text, fetched live from " +
-    "docs.sealmetrics.com. Pass the `path` returned by search_docs (e.g. 'getting-started/quick-start') " +
+    "docs.sealmetrics.com. Takes a documentation page path (e.g. 'getting-started/quick-start') " +
     "or a full docs.sealmetrics.com URL.",
   inputSchema: {
     type: "object" as const,
     properties: {
       path: {
         type: "string",
-        description: "Page path from search_docs (e.g. 'getting-started/quick-start') or a full docs URL.",
+        description: "Documentation page path (e.g. 'getting-started/quick-start') or a full docs URL.",
       },
     },
     required: ["path"],

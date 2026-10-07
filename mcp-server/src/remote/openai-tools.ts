@@ -183,18 +183,14 @@ export function createOpenAICompatTools(ctx: OpenAICompatContext): ToolDef[] {
 
   // search/fetch exist for clients that only speak this pair (ChatGPT); the
   // named report tools sit beside them and are the richer path.
-  const namedToolsHint =
-    " This is a simple entry point with no filters: when the named report tools (get_overview, get_channels, …) are available, " +
-    "they take filters and period comparisons and are the better choice. For SealMetrics documentation use search_docs.";
-
   const searchTool: ToolDef = {
     name: "search",
     description: (multiSite
-      ? "Search the available SealMetrics analytics reports. This connection covers several sites, so name the site (or its domain) in the query — otherwise the results are the list of sites to choose from. " +
-        "Pass a result id to `fetch` to get the data. Mention a time range (e.g. 'last 7 days') to scope the reports."
+      ? "Search the available SealMetrics analytics reports across the sites this connection covers. A query that names a site (or its domain) returns that site's reports; otherwise the results are the list of sites. " +
+        "Each result carries an id that retrieves the report. A time range in the query (e.g. 'last 7 days') scopes the reports."
       : "Search the available SealMetrics analytics reports for the connected site. " +
-        "Returns report references; pass a result id to `fetch` to get the data. " +
-        "Mention a time range in the query (e.g. 'last 7 days') to scope the reports.") + namedToolsHint,
+        "Returns report references, each with an id that retrieves the report. " +
+        "A time range in the query (e.g. 'last 7 days') scopes the reports. No filters or period comparisons."),
     inputSchema: {
       type: "object",
       properties: {
@@ -224,14 +220,14 @@ export function createOpenAICompatTools(ctx: OpenAICompatContext): ToolDef[] {
   const fetchTool: ToolDef = {
     name: "fetch",
     description:
-      "Fetch a SealMetrics analytics report by id (as returned by `search`). " +
+      "Get a SealMetrics analytics report by its id. " +
       (multiSite
         ? "Id format: '<site_id>:<report>:<period>', e.g. 'myshop:overview:30d'. A 'site:<site_id>' id returns that site's details and the report ids available for it."
         : "Id format: '<report>:<period>', e.g. 'overview:30d'."),
     inputSchema: {
       type: "object",
       properties: {
-        id: { type: "string", description: "Id from a `search` result, e.g. 'conversions:7d'." },
+        id: { type: "string", description: "Report id, e.g. 'conversions:7d'." },
       },
       required: ["id"],
     },

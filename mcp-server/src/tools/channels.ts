@@ -46,7 +46,7 @@ export const getChannelsTool: ToolDef = {
 export const getTopChannelsTool: ToolDef = {
   name: "get_top_channels",
   description:
-    "Get top channels ranked by entrances. Returns a compact list of the top N channels (Paid Search, Organic, Social, etc.) with no pagination. For paginated results use get_channels.",
+    "Get the top channels (Paid Search, Organic, Social, etc.) ranked by entrances, as a compact list of the top N. No pagination.",
   inputSchema: {
     type: "object" as const,
     properties: {
@@ -180,9 +180,8 @@ export const testChannelRulesTool: ToolDef = {
   description:
     "Classify a source/medium/campaign combination exactly like the tracking pixel would " +
     "(same RE2 semantics, lowercase matching, custom rules before defaults). Returns the " +
-    "resulting channel and the rule that matched. Set include_inactive=true to also evaluate " +
-    "draft (not live) custom rules — use it to verify a draft before a human publishes it in " +
-    "the dashboard.",
+    "resulting channel and the rule that matched. With include_inactive=true, draft (not live) " +
+    "custom rules are evaluated too, so a draft can be checked before it is published in the dashboard.",
   inputSchema: {
     type: "object" as const,
     properties: {
@@ -216,8 +215,7 @@ export const createChannelRuleTool: ToolDef = {
   description:
     "Create a custom channel classification rule AS A DRAFT for a site. " +
     DRAFT_ONLY_NOTE +
-    " After creating, verify it with test_channel_rules (include_inactive=true) and tell the " +
-    "user to publish it from the dashboard." +
+    " A draft changes no traffic until a human switches it live in the dashboard." +
     SCOPE_NOTE,
   inputSchema: {
     type: "object" as const,

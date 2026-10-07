@@ -98,7 +98,20 @@ function readBody(req: IncomingMessage, maxBytes: number): Promise<string> {
  * still the expected behavior.
  */
 const REMOTE_INSTRUCTIONS =
-  "This connection may cover one or several SealMetrics sites. Every tool call targets exactly ONE site (`site_id`); when the connection covers a single site it is applied automatically. Call `list_sites` to learn their names. If the user has not made clear which site they mean, ASK before querying — never pick one yourself and never fan out over all sites. Querying two or three sites the user named explicitly (e.g. to compare them) is fine: one call per named site.";
+  "This connection may cover one or several SealMetrics sites. Every tool call targets exactly ONE site (`site_id`); when the connection covers a single site it is applied automatically. Call `list_sites` to learn their names. If the user has not made clear which site they mean, ASK before querying — never pick one yourself and never fan out over all sites. Querying two or three sites the user named explicitly (e.g. to compare them) is fine: one call per named site. " +
+  // Which tool fits which question lives here, not in the tool descriptions:
+  // the Claude directory requires descriptions that say only what a tool does,
+  // with no instructions to the model and no references to other tools.
+  "Choosing tools: the get_top_* tools are compact top-N lists; get_traffic_sources, get_campaigns, get_terms, get_pages, " +
+  "get_landing_pages and get_channels add period comparison, sorting, pagination and more filters. get_pages has no bounce " +
+  "rate; get_landing_pages does. get_conversions and get_microconversions aggregate by type; get_conversions_raw and " +
+  "get_microconversions_raw return one row per event, and get_conversion_items_raw one row per product, for per-SKU analysis. " +
+  "list_microconversion_types and list_property_keys show what exists before querying values or breakdowns. " +
+  "For a marketing report or a channel/campaign diagnosis, read get_marketing_playbook first and then fetch the numbers " +
+  "with the data tools; for a single metric, call the data tool directly. For a setup problem or a number that looks wrong, " +
+  "read get_troubleshooting_guide first; for how-to questions, search_docs finds pages and get_doc reads one. " +
+  "get_countries lists the country codes with traffic, and the landing page reports give the exact paths the landing_page " +
+  "filters take. search and fetch are a simple entry point without filters.";
 
 const SITE_ID_REMOTE_HINT =
   "Pass site_id explicitly; call list_sites to see the sites this connection covers.";

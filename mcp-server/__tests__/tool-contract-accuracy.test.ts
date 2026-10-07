@@ -173,7 +173,8 @@ describe("site_id description", () => {
       const siteId = tool.inputSchema.properties.site_id as { description?: string } | undefined;
       if (!siteId) continue;
       expect(siteId.description, tool.name).not.toMatch(/^Site ID\. Optional if SEALMETRICS_SITE_ID env var is set\.$/);
-      expect(siteId.description, tool.name).toMatch(/list_sites/);
+      // Where the ID comes from, without naming another tool (Claude directory rule).
+      expect(siteId.description, tool.name).toMatch(/a site the connection covers/);
     }
   });
 });

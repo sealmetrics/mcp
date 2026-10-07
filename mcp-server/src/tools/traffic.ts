@@ -177,8 +177,8 @@ function topNParams(args: Record<string, unknown>): Record<string, string | unde
 export const getTopSourcesTool: ToolDef = {
   name: "get_top_sources",
   description:
-    "Get top traffic sources ranked by entrances. Returns a compact list of the top N sources (utm_source) — no period comparison, sorting or pagination. For compare, other sort orders or more rows, use get_traffic_sources. " +
-    "Pass landing_page to see which sources brought the sessions that entered on one specific page.",
+    "Get the top traffic sources (utm_source) ranked by entrances, as a compact list of the top N. " +
+    "No period comparison, sorting or pagination. With landing_page, only the sessions that entered on that page are counted.",
   inputSchema: {
     type: "object" as const,
     properties: {
@@ -211,7 +211,7 @@ export const getTopSourcesTool: ToolDef = {
 export const getTopCampaignsTool: ToolDef = {
   name: "get_top_campaigns",
   description:
-    "Get top campaigns ranked by entrances. Returns a compact list of the top N campaigns (utm_campaign) — no period comparison, sorting or pagination. For compare, other sort orders or more rows, use get_campaigns.",
+    "Get the top campaigns (utm_campaign) ranked by entrances, as a compact list of the top N. No period comparison, sorting or pagination.",
   inputSchema: {
     type: "object" as const,
     properties: {
@@ -243,7 +243,7 @@ export const getTopCampaignsTool: ToolDef = {
 export const getTopTermsTool: ToolDef = {
   name: "get_top_terms",
   description:
-    "Get top UTM terms (keywords) ranked by entrances. Returns a compact list of the top N terms — no period comparison, sorting or pagination. For compare, other sort orders or more rows, use get_terms.",
+    "Get the top UTM terms (keywords) ranked by entrances, as a compact list of the top N. No period comparison, sorting or pagination.",
   inputSchema: {
     type: "object" as const,
     properties: {

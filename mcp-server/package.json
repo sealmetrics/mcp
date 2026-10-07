@@ -1,6 +1,6 @@
 {
   "name": "@sealmetrics/mcp",
-  "version": "1.11.1",
+  "version": "1.11.4",
   "description": "Sealmetrics analytics MCP server for Claude Code and Claude Desktop",
   "author": "Sealmetrics <dev@sealmetrics.com> (https://github.com/sealmetrics)",
   "homepage": "https://docs.sealmetrics.com/integrations/mcp-server",
@@ -38,7 +38,7 @@
     "prepare": "npm run build && npm run bundle && chmod +x dist/index.js"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.12.1",
+    "@modelcontextprotocol/sdk": "^1.31.0",
     "zod": "^3.25 || ^4.0"
   },
   "peerDependencies": {

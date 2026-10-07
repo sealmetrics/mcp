@@ -6,7 +6,7 @@ import type { ToolDef } from "./index.js";
 export const listSitesTool: ToolDef = {
   name: "list_sites",
   description:
-    "List all sites (web properties) accessible with your API key. Returns site IDs, names, and domains. Use this to find the site_id needed for other tools.",
+    "List the sites (web properties) this connection can read. Returns each site's ID, name and domains; the ID is the site_id the report tools take.",
   inputSchema: {
     type: "object" as const,
     properties: {},
@@ -25,7 +25,7 @@ export const listSitesTool: ToolDef = {
 export const getSiteTool: ToolDef = {
   name: "get_site",
   description:
-    "Get detailed information about a specific site: name, domains, timezone, configuration, and tracking status. Use list_sites first to find available site IDs.",
+    "Get detailed information about one site: name, domains, timezone, configuration and tracking status.",
   inputSchema: {
     type: "object" as const,
     properties: {

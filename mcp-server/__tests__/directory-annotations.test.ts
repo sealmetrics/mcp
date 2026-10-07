@@ -57,3 +57,33 @@ describe("tool annotations for the Connectors Directory", () => {
     }
   });
 });
+
+/**
+ * Directory compliance: the submission form asks the publisher to confirm that
+ * tool descriptions carry no instructions about model behaviour, other tools or
+ * external instruction sources. PR #409 cleaned the remote tools; this pins the
+ * same bar for every tool the local extension exposes, which is what the
+ * Desktop Extensions form submits.
+ */
+describe("tool descriptions carry no instructions", () => {
+  it("no description names another tool", async () => {
+    const tools = await listLocalTools();
+    const names = tools.map((tool) => tool.name);
+    const offenders: string[] = [];
+    for (const tool of tools) {
+      const others = names.filter((name) => name !== tool.name && tool.description?.includes(name));
+      if (others.length) offenders.push(`${tool.name} → ${others.join(", ")}`);
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("no description steers the model", async () => {
+    const tools = await listLocalTools();
+    const steering =
+      /call this (first|whenever)|call it (first|again)|use \`?[a-z_]+\`? (first|instead)|best tool for|you should|always call|wait for explicit|ask the user before|tell the user to/i;
+    const offenders = tools
+      .filter((tool) => steering.test(tool.description ?? ""))
+      .map((tool) => `${tool.name} → ${steering.exec(tool.description ?? "")?.[0]}`);
+    expect(offenders).toEqual([]);
+  });
+});

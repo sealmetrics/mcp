@@ -48,9 +48,9 @@ export const getFunnelTool: ToolDef = {
   description:
     "Get the funnel table broken down by UTM source/medium/campaign/term: per row, entrances, page_views, and counts of each microconversion type and conversion type plus revenue per conversion type, with period totals and the list of types seen. " +
     "The counts are independent aggregates, not a sequential funnel: a row can show more conversions than add_to_cart events, and ratios between columns are not per-session dropoff. " +
-    "Use it to compare how acquisition sources perform across the site's configured events; if you compute step ratios from it, label them as aggregate ratios. " +
+    "Ratios computed from it are aggregate ratios. " +
     "Rows are the top `limit` UTM combinations by entrances (default 100, max 500); `truncated: true` means more exist, so a small source may be missing: " +
-    "filter with utm_source / utm_medium / utm_campaign (exact match, case-insensitive) instead of raising the limit. `totals` always cover the whole filtered period.",
+    "the utm_source / utm_medium / utm_campaign filters (exact match, case-insensitive) narrow the rows. `totals` always cover the whole filtered period.",
   inputSchema: {
     type: "object" as const,
     properties: {

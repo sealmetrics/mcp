@@ -20,14 +20,9 @@ import {
 export const getMarketingPlaybookTool: ToolDef = {
   name: "get_marketing_playbook",
   description:
-    "Call this first when the user asks for a marketing report, a weekly/monthly/quarterly " +
-    "performance summary, a channel or campaign diagnosis, or " +
-    '"how is my marketing doing / why are my sales down / where should I invest". Not needed for a ' +
-    "single-metric lookup (e.g. conversions yesterday, top pages this week): call the data tool directly. It returns the " +
-    "STEP-BY-STEP METHOD (a playbook) to analyze SealMetrics marketing performance — not the data " +
-    "itself. After reading it, follow the steps by calling the read-only data tools (get_overview, " +
-    "get_channels, get_traffic_sources, get_conversions, get_landing_pages, …) to fetch the real " +
-    "numbers and produce the report. " +
+    "Returns the SealMetrics marketing analysis method as text: the steps, checks and benchmarks for a " +
+    "weekly, monthly or quarterly performance report and for diagnosing a channel or campaign. " +
+    "It contains no site data. " +
     MARKETING_GUIDE_DESCRIPTION,
   inputSchema: {
     type: "object" as const,

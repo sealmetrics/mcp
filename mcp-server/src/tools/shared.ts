@@ -104,7 +104,7 @@ const COUNTRY_ERROR =
 export const COUNTRY_SCHEMA = {
   type: "string",
   description:
-    "Filter by country: ISO-3166-1 alpha-2 code (e.g. 'ES' for Spain, 'US'), or 'Unknown' for traffic whose browser timezone maps to no country. Not the country name. Use get_countries to see the codes with traffic.",
+    "Filter by country: ISO-3166-1 alpha-2 code (e.g. 'ES' for Spain, 'US'), or 'Unknown' for traffic whose browser timezone maps to no country. Not the country name.",
 } as const;
 
 /** One value or a list of them (PRD-062 RF-034) — see `jsonSchemaToZod`. */
@@ -114,7 +114,7 @@ export const COUNTRY_ARRAY_SCHEMA = {
     { type: "array", items: { type: "string", minLength: 1 }, minItems: 1 },
   ],
   description:
-    "Filter by country code: ISO-3166-1 alpha-2 (e.g. 'ES' or ['ES', 'US']), or 'Unknown' for traffic whose browser timezone maps to no country. Not country names. Use get_countries to see the codes with traffic.",
+    "Filter by country code: ISO-3166-1 alpha-2 (e.g. 'ES' or ['ES', 'US']), or 'Unknown' for traffic whose browser timezone maps to no country. Not country names.",
 } as const;
 
 /** ISO codes upper-cased, `unknown` in any casing as the exact literal. */
@@ -161,7 +161,7 @@ export function countryListParam(args: Record<string, unknown>): string[] | unde
 export const LANDING_PAGE_SCHEMA = {
   type: "string",
   description:
-    "Restrict to sessions that entered on this landing path (exact match, case-insensitive; the trailing slash matters). Copy the value from get_top_landing_pages.",
+    "Restrict to sessions that entered on this landing path (exact match, case-insensitive; the trailing slash matters), as landing paths appear in the landing page reports.",
 } as const;
 
 export const LANDING_PAGE_ARRAY_SCHEMA = {
@@ -170,7 +170,7 @@ export const LANDING_PAGE_ARRAY_SCHEMA = {
     { type: "array", items: { type: "string", minLength: 1 }, minItems: 1 },
   ],
   description:
-    "Filter by entry path, exact match, case-insensitive (e.g. '/camisetas-personalizadas/' or a list of paths). The trailing slash matters. Copy the value from get_top_landing_pages.",
+    "Filter by entry path, exact match, case-insensitive (e.g. '/camisetas-personalizadas/' or a list of paths). The trailing slash matters, as landing paths appear in the landing page reports.",
 } as const;
 
 /**
@@ -181,7 +181,7 @@ export const LANDING_PAGE_ARRAY_SCHEMA = {
 export const SITE_ID_SCHEMA = {
   type: "string",
   description:
-    "Site ID (the site_id / account_id from list_sites). Omit it only when the connection has a default site: a hosted connection that covers exactly one site, or a local server started with SEALMETRICS_SITE_ID.",
+    "Site ID (the site_id / account_id of a site the connection covers). Omit it only when the connection has a default site: a hosted connection that covers exactly one site, or a local server started with SEALMETRICS_SITE_ID.",
 } as const;
 
 const STDIO_SITE_ID_HINT =

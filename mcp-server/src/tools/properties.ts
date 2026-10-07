@@ -22,7 +22,7 @@ const TABLE_SCHEMA = {
 export const listPropertyKeysTool: ToolDef = {
   name: "list_property_keys",
   description:
-    "Get the list of available custom property keys from conversions and/or microconversions. Use this to discover what property keys exist before querying values or breakdowns.",
+    "List the custom property keys present on conversions and/or microconversions in the period.",
   inputSchema: {
     type: "object" as const,
     properties: {

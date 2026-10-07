@@ -5,7 +5,7 @@ import type { ToolDef } from "./index.js";
 export const listSegmentsTool: ToolDef = {
   name: "list_segments",
   description:
-    "List all segments available for a site. Segments are saved filter sets (e.g. 'Mobile users from Spain', 'Organic traffic') defined in the dashboard. The report tools here take no segment argument: to report on a segment, read its filters with get_segment and pass the equivalent named filters (country, device_type, channel_group, utm_*) to a tool that accepts them.",
+    "List all segments available for a site. Segments are saved filter sets (e.g. 'Mobile users from Spain', 'Organic traffic') defined in the dashboard. Reports here take no segment argument: a segment is reproduced by applying its filters as the named arguments the reports do accept (country, device_type, channel_group, utm_*).",
   inputSchema: {
     type: "object" as const,
     properties: {

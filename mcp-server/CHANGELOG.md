@@ -7,6 +7,65 @@ this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 _History before 1.2.0 is not maintained here — see `git log mcp-server/` for
 earlier changes._
 
+## [1.11.4] — 2026-10-07
+
+### Security
+
+- `proxy-addr` 2.0.7 → 2.0.8 ([GHSA-jqcg-44mw-7w3h](https://github.com/advisories/GHSA-jqcg-44mw-7w3h),
+  critical: IPv4-mapped IPv6 addresses could spoof the client IP behind
+  `trust proxy`). It is transitive (`@modelcontextprotocol/sdk` → `express`)
+  and only the SDK's HTTP server loads it, so it matters for the remote
+  connector; it is not bundled into the `.mcpb` and the stdio server never
+  reaches it. No behaviour change.
+
+### Changed — las descripciones de las tools locales tampoco instruyen
+
+La 1.11.3 limpió las 44 tools del transporte remoto. Lo que se envía al
+directorio de extensiones es la **local**, y ahí quedaban cinco descripciones
+que nombraban a otra tool o daban órdenes al modelo (`list_segments`,
+`create_channel_rule`, `verify_event_instrumented`, `plan_install`,
+`simulate_install`). Ahora describen qué hace y qué devuelve cada una, sin
+"verify it with…", "wait for explicit approval" ni "ask the user before…".
+Las garantías que esas frases protegían siguen en pie, enunciadas como hechos:
+una regla nace como borrador y solo una persona la publica; un plan bloqueado
+no es seguro de escribir; `simulate_install` no instala nada y su resultado es
+simulado, no verificado.
+
+## [1.11.3] — 2026-10-04
+
+### Changed — tool descriptions say what a tool does, and nothing else
+
+The Claude Connectors Directory asks the publisher to confirm that tool
+descriptions contain no instructions about model behavior, other tools or
+external instruction sources. Twenty-three of the 44 remote tools did not meet
+that: "Call this first when…", "For compare use get_campaigns", "Use list_sites
+first", "**Best tool for per-product analytics**".
+
+- Every remote tool description now states what the tool returns and its
+  limits, without naming another tool or telling the model what to do.
+  Parameter descriptions too: `site_id`, `country`, `landing_page`, `path`
+  and `id` no longer point at `list_sites`, `get_countries`,
+  `get_top_landing_pages`, `search_docs` or `search`.
+- Which tool fits which question moves to the remote server's `instructions`,
+  the place MCP gives a server for that guidance: compact vs full reports,
+  aggregated vs per-event vs per-product rows, the playbook and the
+  troubleshooting guide first, docs search then read.
+- Two tests on the remote surface keep it that way: no description or parameter
+  description names another tool, and no description carries a directive.
+
+## [1.11.2] — 2026-10-02
+
+### Security
+
+- `@modelcontextprotocol/sdk` 1.12.1 → 1.31.0, and the transitive packages it
+  pulls are refreshed with it: `fast-uri` (host confusion and SSRF via
+  malformed IPv6 and percent-decoding), `hono` and `@hono/node-server`,
+  `ip-address`, `qs` and `body-parser`. `npm audit --omit=dev` goes from six
+  advisories (three of them high) to none. Only `fast-uri` was actually
+  bundled into the `.mcpb`; the rest reach the published package through the
+  SDK's HTTP server, which the Desktop extension does not load. No behaviour
+  change: tests and the packaged extension are identical otherwise.
+
 ## [1.11.1] — 2026-09-29
 
 ### Changed — ready for Anthropic's Desktop Extensions directory

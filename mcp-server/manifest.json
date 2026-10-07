@@ -2,7 +2,7 @@
   "manifest_version": "0.3",
   "name": "sealmetrics",
   "display_name": "Sealmetrics Analytics",
-  "version": "1.11.1",
+  "version": "1.11.4",
   "description": "Privacy-first, cookieless web analytics in Claude. Register a free Sealmetrics site from the chat, place the tracker, and query your traffic & conversions — no terminal needed.",
   "long_description": "Sealmetrics is GDPR-compliant, cookieless analytics. This Desktop Extension lets Claude:\n\n- **Register a new free site from the chat** (no account or terminal required): `provision_site` creates the account, returns the tracker snippet to paste in your site's `<head>`, and emails you a claim link to set a password.\n- **Verify the install** (`verify_setup`) and **instrument events** with the canonical taxonomy + privacy rules (`get_instrumentation_guide`, `verify_event_instrumented`).\n- **Query your analytics** through ~52 read-only tools (traffic, pages, conversions, audience, channels, funnels, bots, and more) once an api_key is available.\n\nLeave the API key empty to register a new site from the chat; paste an existing read-only api_key to query data immediately. The api_key is read-only and scoped to your account.",
   "author": {

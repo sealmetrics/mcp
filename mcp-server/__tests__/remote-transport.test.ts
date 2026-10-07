@@ -150,6 +150,7 @@ const TOOLS_LIST = { jsonrpc: "2.0", id: 2, method: "tools/list", params: {} };
 
 type RemoteTool = {
   name: string;
+  description?: string;
   annotations?: { readOnlyHint?: boolean; openWorldHint?: boolean; destructiveHint?: boolean };
   inputSchema?: {
     required?: string[];
@@ -289,7 +290,8 @@ describe("input schemas on the remote surface", () => {
   it("describes site_id without the stdio-only env var as the way to omit it", async () => {
     const tools = await listRemoteToolsFull();
     const overview = tools.find((tool) => tool.name === "get_overview");
-    expect(overview?.inputSchema?.properties?.site_id?.description).toMatch(/list_sites/);
+    expect(overview?.inputSchema?.properties?.site_id?.description).toMatch(/a site the connection covers/);
+    expect(overview?.inputSchema?.properties?.site_id?.description).not.toMatch(/list_sites/);
   });
 });
 
@@ -307,6 +309,49 @@ describe("tool annotations on the remote surface", () => {
       expect(tool.annotations?.openWorldHint).toBe(false);
       expect(tool.annotations?.destructiveHint).toBe(false);
     }
+  });
+});
+
+describe("tool descriptions for the Claude directory", () => {
+  // The Connectors Directory submission asks the publisher to confirm that
+  // "tool descriptions contain no instructions about model behavior, other
+  // tools, or external instruction sources". Which tool fits which question
+  // belongs in the server instructions instead.
+  //
+  // "search" and "fetch" are also plain English words, so for those two only a
+  // backticked mention counts as a reference.
+  const DIRECTIVE =
+    /\b(call|use) (this|it|them)\b|\bcall [a-z_]+ (first|directly)\b|\bprefer\b|\binstead\b(?! of)|\bfirst when\b|\bafter (reading|calling)\b|\*\*/i;
+
+  function mentions(text: string, name: string): boolean {
+    if (name === "search" || name === "fetch") return text.includes("`" + name + "`");
+    return new RegExp(`\\b${name}\\b`).test(text);
+  }
+
+  it("no description or parameter description names another tool", async () => {
+    const tools = await listRemoteToolsFull();
+    const names = tools.map((tool) => tool.name);
+    const offenders: string[] = [];
+    for (const tool of tools) {
+      const texts = [
+        tool.description ?? "",
+        ...Object.values(tool.inputSchema?.properties ?? {}).map((p) => p.description ?? ""),
+      ];
+      for (const other of names) {
+        if (other !== tool.name && texts.some((text) => mentions(text, other))) {
+          offenders.push(`${tool.name} → ${other}`);
+        }
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("no description tells the model what to do", async () => {
+    const tools = await listRemoteToolsFull();
+    const offenders = tools
+      .filter((tool) => DIRECTIVE.test(tool.description ?? ""))
+      .map((tool) => `${tool.name}: ${(tool.description ?? "").match(DIRECTIVE)?.[0]}`);
+    expect(offenders).toEqual([]);
   });
 });
 

@@ -22,8 +22,7 @@ export const getConversionsTool: ToolDef = {
   name: "get_conversions",
   description:
     "Get conversions broken down by type (e.g. purchase, signup). Shows count, revenue, and average order value per conversion type. " +
-    "Use for aggregated counts/revenue by conversion type. " +
-    "**For per-event detail or per-product analysis use `get_conversions_raw` or `get_conversion_items_raw`.**",
+    "Aggregated per type; no per-event or per-product rows.",
   inputSchema: {
     type: "object" as const,
     properties: {
@@ -71,8 +70,7 @@ export const getConversionsTool: ToolDef = {
 export const getMicroconversionsTool: ToolDef = {
   name: "get_microconversions",
   description:
-    "Get microconversions (smaller engagement events) broken down by type: add_to_cart, newsletter_signup, pdf_download, etc. Shows count and trends per event type. " +
-    "**For per-event detail use `get_microconversions_raw`.**",
+    "Get microconversions (smaller engagement events) broken down by type: add_to_cart, newsletter_signup, pdf_download, etc. Shows count and trends per event type; aggregated, no per-event rows.",
   inputSchema: {
     type: "object" as const,
     properties: {
@@ -115,7 +113,7 @@ export const getMicroconversionsTool: ToolDef = {
 export const listMicroconversionTypesTool: ToolDef = {
   name: "list_microconversion_types",
   description:
-    "Get the list of available microconversion type names for a site. Use this to discover what microconversion types exist before querying details.",
+    "List the microconversion type names that have events on a site in the period.",
   inputSchema: {
     type: "object" as const,
     properties: {
@@ -373,10 +371,9 @@ export const getConversionsRawTool: ToolDef = {
   name: "get_conversions_raw",
   description:
     "Returns raw conversion rows from /stats/conversions/raw (one row per event, with timestamp_utc and timestamp_local). " +
-    "Use for one-row-per-event detail. " +
-    "**For per-product/SKU analysis prefer `get_conversion_items_raw` (always includes item properties like sku, price, quantity).** " +
-    "Custom `properties` are excluded by default — pass `include_properties=true` to receive them. " +
-    "Ranges longer than 31 days are rejected: use a period of 31 days or less (e.g. today, yesterday, 7d, 30d, last_week, last_month) or start_date/end_date. `limit` defaults to 10 and is capped at 100 rows; use `page` for more.",
+    "Item-level data (sku, price, quantity per product) is not split into rows here. " +
+    "Custom `properties` are excluded unless `include_properties=true`. " +
+    "Accepts ranges of up to 31 days (e.g. today, yesterday, 7d, 30d, last_week, last_month, or start_date/end_date); longer ones are rejected. `limit` defaults to 10 and is capped at 100 rows; `page` returns further rows.",
   inputSchema: {
     type: "object" as const,
     properties: {
@@ -414,7 +411,7 @@ export const getMicroconversionsRawTool: ToolDef = {
     "Returns raw microconversion rows from /stats/microconversions/raw (one row per event, with timestamp_utc and timestamp_local). " +
     "Use for one-row-per-event detail of microconversions (add_to_cart, newsletter_signup, etc.). " +
     "Custom `properties` are excluded by default — pass `include_properties=true` to receive them. " +
-    "Ranges longer than 31 days are rejected: use a period of 31 days or less (e.g. today, yesterday, 7d, 30d, last_week, last_month) or start_date/end_date. `limit` defaults to 10 and is capped at 100 rows; use `page` for more.",
+    "Accepts ranges of up to 31 days (e.g. today, yesterday, 7d, 30d, last_week, last_month, or start_date/end_date); longer ones are rejected. `limit` defaults to 10 and is capped at 100 rows; `page` returns further rows.",
   inputSchema: {
     type: "object" as const,
     properties: {
@@ -450,9 +447,8 @@ export const getConversionItemsRawTool: ToolDef = {
   name: "get_conversion_items_raw",
   description:
     "Returns one row per item inside a conversion (e.g. one row per product in a purchase) from /stats/conversion-items/raw. " +
-    "`properties` always included — that's where product_id, sku, price, quantity live. " +
-    "**Best tool for per-product analytics.** " +
-    "Ranges longer than 31 days are rejected: use a period of 31 days or less (e.g. today, yesterday, 7d, 30d, last_week, last_month) or start_date/end_date. `limit` defaults to 10 and is capped at 100 rows; use `page` for more.",
+    "`properties` are always included; they carry product_id, sku, price and quantity. " +
+    "Accepts ranges of up to 31 days (e.g. today, yesterday, 7d, 30d, last_week, last_month, or start_date/end_date); longer ones are rejected. `limit` defaults to 10 and is capped at 100 rows; `page` returns further rows.",
   inputSchema: {
     type: "object" as const,
     properties: {
