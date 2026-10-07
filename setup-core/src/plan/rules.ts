@@ -283,7 +283,7 @@ export const PL11_domain: Rule = (plan, ctx) => {
       code: "PL-11",
       severity: "block",
       event: "site",
-      message: `The site lists ${www.join(", ")} with the www. prefix. pixel-service strips www. from every hit's host before matching, so '${host}' never matches and all hits are rejected (invalid_domain; the tracker script itself is refused with 403). Known issue: docs/prd/pending/prd-site-domain-reject-www-prefix.md.`,
+      message: `The site lists ${www.join(", ")} with the www. prefix. pixel-service strips www. from every hit's host before matching, so '${host}' never matches and all hits are rejected (invalid_domain; the tracker script itself is refused with 403).`,
       fix: `Change the site's domain to '${www[0].slice(4)}' in the dashboard; it also covers www. and every subdomain.`,
     }];
   }

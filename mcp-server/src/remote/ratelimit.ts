@@ -2,8 +2,8 @@
  * Edge rate limiting for the remote transport (RF-RMT41).
  *
  * Fixed-window counters per OAuth token (hashed) and per client IP, backed by
- * Redis so limits hold across replicas (no in-memory-per-replica state — the
- * balneospa lesson). When Redis is not configured (local dev) it degrades to an
+ * Redis so limits hold across replicas (no in-memory-per-replica state, learned
+ * from a past incident). When Redis is not configured (local dev) it degrades to an
  * in-process window with a warning.
  *
  * The `redis` package is a devDependency loaded lazily: the published npm

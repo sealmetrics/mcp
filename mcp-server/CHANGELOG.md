@@ -7,6 +7,32 @@ this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 _History before 1.2.0 is not maintained here — see `git log mcp-server/` for
 earlier changes._
 
+## [1.11.5] — 2026-10-07
+
+### Security / Changed — nada que solo tenga sentido dentro del monorepo viaja al espejo público
+
+Auditoría del repo que se publica en github.com/sealmetrics/mcp, generado desde
+este árbol. Sin secretos reales ni datos de clientes; esto es lo que sí salía:
+
+- **La clave de aprovisionamiento de desarrollo ya no cubre pre-producción.**
+  `isNonProdTarget` solo reconoce `localhost`/`127.0.0.1`, en el MCP y en el CLI
+  (ambos paquetes son públicos en npm). `pre.sealmetrics.com` responde desde
+  internet, y el código explicaba qué clave usar contra él. Cualquier entorno
+  desplegado necesita ahora `SEALMETRICS_PROVISION_KEY` explícita.
+- **Un mensaje de error que ve el usuario** (`plan_install`, sitio con dominio
+  `www.`) citaba un documento interno de la carpeta de pendientes, anunciando un
+  defecto sin arreglar y apuntando a un archivo inaccesible. Explica el
+  desajuste sin nombrarlo.
+- **Comentarios que publicaban la topología de producción**: proxy inverso,
+  nombre interno del servicio de la API, nombre de la cabecera interna, la
+  ventana de propagación de una revocación y una consulta SQL con nombres de
+  tabla y columna. Genericizados.
+- Un comentario citaba un nombre que parecía de cliente; ahora dice "a past
+  incident".
+
+Dos tests nuevos lo fijan: ninguna descripción ni parámetro apunta a una ruta
+privada, y la clave automática cubre solo local.
+
 ## [1.11.4] — 2026-10-07
 
 ### Security

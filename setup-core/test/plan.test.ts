@@ -145,7 +145,10 @@ describe("rules PL-01…PL-17 (RF-B2)", () => {
   it("PL-11 blocks a www.-listed site exactly like pixel-service (the list keeps www., the hit loses it)", () => {
     const f = codes(ecommercePlan({ site: { domain: "www.demo-store.com" } }), "PL-11", ["www.demo-store.com"])[0];
     expect(f?.severity).toBe("block");
-    expect(f?.message).toContain("prd-site-domain-reject-www-prefix");
+    // The message explains the mismatch without naming an internal document:
+    // the mirror of this package is public (see directory-annotations.test.ts).
+    expect(f?.message).toContain("invalid_domain");
+    expect(f?.message).not.toMatch(/docs\/prd\/|CLAUDE\.md/);
     expect(f?.fix).toContain("'demo-store.com'");
   });
 

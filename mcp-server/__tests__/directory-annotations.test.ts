@@ -87,3 +87,30 @@ describe("tool descriptions carry no instructions", () => {
     expect(offenders).toEqual([]);
   });
 });
+
+/**
+ * The mirror published at github.com/sealmetrics/mcp is generated from this
+ * tree, so anything written here becomes public on the next sync. Two things
+ * must never travel: a path inside the private monorepo (a dead link for the
+ * reader, and in a user-facing message it advertises an unfixed defect), and a
+ * usable provision key for an environment reachable from the internet.
+ */
+describe("nothing that only makes sense inside the monorepo is published", () => {
+  it("no tool or parameter description points at a private path", async () => {
+    const tools = await listLocalTools();
+    const privatePath = /docs\/prd\/|CLAUDE\.md|api\/src\/sealmetrics_api|github\.com\/adinton/;
+    const offenders = tools
+      .filter((tool) => privatePath.test(JSON.stringify([tool.description, tool.inputSchema])))
+      .map((tool) => tool.name);
+    expect(offenders).toEqual([]);
+  });
+
+  it("the auto-used provision key covers localhost only", async () => {
+    const { isNonProdTarget } = await import("../src/embedded.js");
+    expect(isNonProdTarget("http://localhost:8001/api/v1")).toBe(true);
+    expect(isNonProdTarget("http://127.0.0.1:8001/api/v1")).toBe(true);
+    // Reachable from the internet: it needs SEALMETRICS_PROVISION_KEY instead.
+    expect(isNonProdTarget("https://pre.sealmetrics.com/api/v1")).toBe(false);
+    expect(isNonProdTarget("https://my.sealmetrics.com/api/v1")).toBe(false);
+  });
+});

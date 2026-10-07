@@ -21,7 +21,7 @@ export interface RemoteAppConfig {
   publicUrl: string;
   /** OAuth issuer (AS), e.g. https://my.sealmetrics.com */
   oauthIssuer: string;
-  /** API base the tools call, e.g. http://api-1:8000/api/v1 */
+  /** API base the tools call, resolved from configuration. */
   apiBaseUrl: string;
   /** Dashboard base for citation links in search/fetch results. */
   dashboardUrl: string;
@@ -172,7 +172,7 @@ export function createRemoteApp(config: RemoteAppConfig, deps: RemoteAppDeps) {
     if (config.trustProxy) {
       const forwarded = req.headers["x-forwarded-for"];
       if (typeof forwarded === "string" && forwarded.length > 0) {
-        // Exactly ONE trusted hop (Traefik) fronts this service and it APPENDS
+        // Exactly ONE trusted hop (the reverse proxy) fronts this service and it APPENDS
         // the real client IP — take the RIGHTMOST entry. The leftmost is
         // attacker-controlled (per-IP rate-limit spoofing, AUD-RMT01 F1).
         const entries = forwarded.split(",");

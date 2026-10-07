@@ -3,10 +3,10 @@
  * Remote MCP entrypoint (Streamable HTTP) — RF-RMT10.
  *
  * Thin bootstrap: reads env config and wires `createRemoteApp()` (the testable
- * request handler) to two Node http servers — the public one (behind Traefik at
- * mcp.sealmetrics.com) and an internal metrics server (RF-RMT42, never exposed
- * through Traefik). The npm package `bin` remains the stdio entrypoint
- * (dist/index.js); this file only runs inside the `mcp-remote` Docker service.
+ * request handler) to two Node http servers — the public
+ * one, served behind a reverse proxy, and a metrics server on a separate port
+ * that is never routed publicly (RF-RMT42). The npm package `bin` remains the
+ * stdio entrypoint (dist/index.js); this file runs only in the remote service.
  */
 import { createServer as createHttpServer } from "node:http";
 import { createRemoteApp } from "./remote/app.js";

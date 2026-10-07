@@ -3,9 +3,9 @@
  *
  * The remote transport never validates tokens itself: it resolves the incoming
  * `Authorization: Bearer` token against the API's internal introspection
- * endpoint (service-to-service, `X-Internal-Key`, Docker network only). The API
- * caches positive lookups in Redis (~60s) so revocation propagates in ≤60s
- * without this process holding any per-replica state.
+ * endpoint, reachable only from inside the deployment and authenticated
+ * service-to-service. The API caches positive lookups briefly, so a revoked
+ * token stops working without this process holding any per-replica state.
  *
  * The resolved api_key is held per-request only and never logged or echoed.
  */
@@ -54,7 +54,7 @@ export class IntrospectionError extends Error {
 }
 
 export interface IntrospectorOptions {
-  /** Internal endpoint, e.g. http://api-1:8000/api/v1/internal/oauth/introspect */
+  /** The API's internal introspection endpoint, resolved from configuration. */
   url: string;
   internalKey: string;
   fetchImpl?: typeof fetch;

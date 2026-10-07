@@ -3,7 +3,7 @@
  *
  * Hand-rolled text exposition (counters + one duration histogram) to keep the
  * published npm package dependency-free. Served on a separate internal port —
- * never behind the public Traefik router.
+ * never behind the public router.
  */
 
 const LATENCY_BUCKETS = [0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10];
