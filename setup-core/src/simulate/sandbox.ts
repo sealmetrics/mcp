@@ -18,7 +18,7 @@ export const SIM_USER_AGENT =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36";
 const RUN_TIMEOUT_MS = 1000;
 
-/** The queue stub from tracker/CLAUDE.md ("Buffer stub"). Its markers are a public contract. */
+/** The tracker's queue stub ("Buffer stub"). Its markers are a public contract. */
 export const TRACKER_STUB =
   "!function(w){w.sealmetrics=w.sealmetrics||function(){(w.sealmetrics.q=w.sealmetrics.q||[]).push(['pv',arguments])};w.sealmetrics.q=w.sealmetrics.q||[];w.sealmetrics.conv=w.sealmetrics.conv||function(){w.sealmetrics.q.push(['cv',arguments])};w.sealmetrics.micro=w.sealmetrics.micro||function(){w.sealmetrics.q.push(['mc',arguments])}}(window);";
 

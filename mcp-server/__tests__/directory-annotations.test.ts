@@ -109,8 +109,9 @@ describe("nothing that only makes sense inside the monorepo is published", () =>
     const { isNonProdTarget } = await import("../src/embedded.js");
     expect(isNonProdTarget("http://localhost:8001/api/v1")).toBe(true);
     expect(isNonProdTarget("http://127.0.0.1:8001/api/v1")).toBe(true);
-    // Reachable from the internet: it needs SEALMETRICS_PROVISION_KEY instead.
-    expect(isNonProdTarget("https://pre.sealmetrics.com/api/v1")).toBe(false);
+    // Any deployed host needs SEALMETRICS_PROVISION_KEY instead, so this file
+    // carries no usable key for anything reachable from the internet.
     expect(isNonProdTarget("https://my.sealmetrics.com/api/v1")).toBe(false);
+    expect(isNonProdTarget("https://staging.example.com/api/v1")).toBe(false);
   });
 });

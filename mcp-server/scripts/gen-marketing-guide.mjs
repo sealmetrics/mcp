@@ -55,7 +55,7 @@ export function generateModule(md) {
  * Regenerate: \`npm run gen-marketing-guide\` (runs automatically on \`prebuild\`).
  *
  * The marketing playbook exposed as an MCP resource + the backing CONTENT for the
- * \`get_marketing_playbook\` tool. See PRD docs/prd/implemented/mcp-marketing-skill.md.
+ * \`get_marketing_playbook\` tool.
  */
 export const MARKETING_GUIDE_URI = ${JSON.stringify(MARKETING_GUIDE_URI)};
 export const MARKETING_GUIDE_NAME = ${JSON.stringify(MARKETING_GUIDE_NAME)};

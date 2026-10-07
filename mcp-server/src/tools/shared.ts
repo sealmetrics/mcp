@@ -32,7 +32,7 @@ const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
  * with "30d". So when both dates are provided the period is NOT sent (the
  * custom range wins, as the schema descriptions promise). Dates are passed
  * through verbatim: the API interprets them as account-local days (never
- * resolved client-side — see the date/timezone rules in CLAUDE.md).
+ * resolved client-side: the API resolves every period in the account's timezone).
  */
 export function dateRangeParams(args: Record<string, unknown>): {
   period?: string;
